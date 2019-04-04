@@ -25,10 +25,10 @@
 				String status = request.getParameter("status");
 				if(status != null) {
 					if(status.equals("false")) {
-						out.print("Incorrect Login credentials!");
+						System.out.print("Incorrect Login credentials!");
 					}
 					else {
-						out.print("Some error occurred! Please try again.");
+						System.out.print("Some error occurred! Please try again.");
 					}
 				}
 			%>
