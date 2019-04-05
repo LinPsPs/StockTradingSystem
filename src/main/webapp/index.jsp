@@ -18,7 +18,7 @@
 						response.sendRedirect("customerRepresentativeHome.jsp");
 					}
 					else {
-						response.sendRedirect("home.jsp");	
+						response.sendRedirect("home.jsp");
 					}
 				}
 				
