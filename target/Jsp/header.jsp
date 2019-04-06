@@ -11,7 +11,8 @@
 
 <html>
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+    <meta charset="ISO-8859-1">
+    <meta http-equiv="Content-Type" content="text/html">
     <title>${heading}</title>
     <link href="webjars/bootstrap/4.1.3/css/bootstrap.min.css" rel="stylesheet" />
     <script src="webjars/jquery/3.3.1-1/jquery.min.js"></script>
@@ -19,7 +20,7 @@
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-light bg-light mb-3">
-    <a class="navbar-brand" href="#">Online stock trading</a>
+    <a class="navbar-brand" href="#">XYZ Online Stock Trading</a>
     <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav">
             <li class="nav-item">
