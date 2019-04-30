@@ -24,12 +24,16 @@
 				
 				String status = request.getParameter("status");
 				if(status != null) {
-					if(status.equals("false")) {
-						out.print("Incorrect Login credentials!");
-					}
-					else {
-						out.print("Some error occurred! Please try again.");
-					}
+					if(status.equals("false")) {%>
+						<div class="alert alert-danger" role="alert" style="text-align: center">
+							Invalid Username or Password or Role!
+						</div>
+					<%}
+					else {%>
+						<div class="alert alert-danger" role="alert" style="text-align: center">
+							Some Error Occured! Please Try Again!
+						</div>
+					<%}
 				}
 			%>
 			<form action="login">

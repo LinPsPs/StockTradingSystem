@@ -13,6 +13,12 @@
         <servlet-class>resources.LoginController</servlet-class>
     </servlet>
     <servlet>
+        <display-name>SignUpController</display-name>
+        <servlet-name>SignUpController</servlet-name>
+        <description></description>
+        <servlet-class>resources.SignUpController</servlet-class>
+    </servlet>
+    <servlet>
         <description>
         </description>
         <display-name>LogoutController</display-name>
@@ -305,6 +311,10 @@
     <servlet-mapping>
         <servlet-name>GetCustomersController</servlet-name>
         <url-pattern>/getCustomers</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SignUpController</servlet-name>
+        <url-pattern>/signUp</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>LoginController</servlet-name>

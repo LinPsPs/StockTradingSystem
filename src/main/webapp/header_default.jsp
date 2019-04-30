@@ -26,9 +26,7 @@
         <div class="container">
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav">
-                    <li class="nav-item">
-                        <a class="nav-link" href="home.jsp">Home<span class="sr-only">(current)</span></a>
-                    </li>
+
                 </ul>
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item"><a class="nav-link" href="sign_up.jsp"><span class="fa fa-user"></span> Sign Up</a></li>
