@@ -82,7 +82,6 @@
 					<select class="form-control" name="role">
                         <option value="manager">Manager</option>
                         <option value="customerRepresentative">Customer Representative</option>
-						<option value="customer">Customer</option>
 					</select>
 				</div>
                 <div class="form-group" style="text-align: center">
