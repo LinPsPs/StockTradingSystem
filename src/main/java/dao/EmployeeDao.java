@@ -152,24 +152,8 @@ public class EmployeeDao {
 		List<Employee> employees = new ArrayList<Employee>();
 
 		Location location = new Location();
-		location.setCity("Stony Brook");
-		location.setState("NY");
-		location.setZipCode(11790);
 
-		/*Sample data begins*/
-		for (int i = 0; i < 10; i++) {
-			Employee employee = new Employee();
-			employee.setId("111-11-1111");
-			employee.setEmail("shiyong@cs.sunysb.edu");
-			employee.setFirstName("Shiyong");
-			employee.setLastName("Lu");
-			employee.setAddress("123 Success Street");
-			employee.setLocation(location);
-			employee.setTelephone("5166328959");
-			employee.setEmployeeID("631-413-5555");
-			employee.setHourlyRate(100);
-			employees.add(employee);
-		}
+
 		/*Sample data ends*/
 		
 		return employees;
