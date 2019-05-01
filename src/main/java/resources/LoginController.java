@@ -67,7 +67,7 @@ public class LoginController extends HttpServlet {
 
 		}
 		else {
-			response.sendRedirect("index.jsp?status=false");
+			response.sendRedirect("login.jsp?status=false");
 		}
 		
 	}

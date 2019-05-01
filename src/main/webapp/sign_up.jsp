@@ -80,7 +80,6 @@
 				<div class="form-group">
                     <label >Role</label>
 					<select class="form-control" name="role">
-                        <option value="customer">Customer</option>
                         <option value="manager">Manager</option>
                         <option value="customerRepresentative">Customer Representative</option>
 					</select>

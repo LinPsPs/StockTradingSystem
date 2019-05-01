@@ -2,6 +2,8 @@ package dao;
 
 import model.Login;
 
+import java.sql.*;
+
 public class LoginDao {
 	/*
 	 * This class handles all the database operations related to login functionality
@@ -19,11 +21,62 @@ public class LoginDao {
 		 */
 		
 		/*Sample data begins*/
-		Login login = new Login();
-		login.setRole(role);
-		return login;
+        Connection connection = null;
+        Statement statement = null;
+		try{
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			connection = DriverManager.getConnection("jdbc:mysql://107.155.113.86:3306/STOCKSYSTEM?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC",
+                    "cse305","CSE305XYZ");
+            connection.setAutoCommit(true); // only one transaction
+            connection.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
+            statement = connection.createStatement();
+            ResultSet resultSet =statement.executeQuery
+                    ("SELECT Role FROM Login L WHERE L.Email= '"+username+"' AND L.Password= '"+password+"'");
+            String tempRole = null;
+            while (resultSet.next()){
+                tempRole = resultSet.getString("Role");
+            }
+            //System.out.println(role);
+            //System.out.println(tempRole);
+            // clean up environment
+            resultSet.close();
+            statement.close();
+            connection.close();
+
+            if (tempRole.equals(role)){
+                Login login = new Login();
+                login.setRole(role);
+                login.setUsername(username);
+                return login;
+            }
+            return null;
+
+		}catch(SQLException ex){
+		    try{
+		        if (connection!=null)
+		            connection.rollback();
+            }catch (Exception e){
+                System.out.println(e.getMessage());
+            }
+        } catch (Exception e){
+			System.out.println(e.getMessage());
+		}finally {
+		    try{
+		        if (statement!=null)
+		            statement.close();
+            }catch (SQLException se2){
+                System.out.println(se2.getMessage());
+            }
+            try{
+		        if (connection!=null)
+		            connection.close();
+            }catch (SQLException se3){
+                System.out.println(se3.getMessage());
+            }
+        }
+
 		/*Sample data ends*/
-		
+		return null;
 	}
 	
 	public String addUser(Login login) {
