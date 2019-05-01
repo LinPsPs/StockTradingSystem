@@ -83,7 +83,7 @@ public class SignUpDao {
 			java.util.Date dt = new java.util.Date();
 			java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd");
 			String currentTime = sdf.format(dt);
-			if (initRole.equals("manager")||initRole.equals("customerRepresentative")){
+			if (initRole.equals("manager")||initRole.equals("customerRepresentative")||initRole.equals("customer")){
 				//manager
 				preparedStatement = connection.prepareStatement(
 						"INSERT INTO Employee(Role, SSN, StartDate) VALUE (?,?,?)");
