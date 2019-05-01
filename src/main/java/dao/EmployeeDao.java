@@ -3,8 +3,13 @@ package dao;
 import model.Employee;
 import model.Location;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+
 
 public class EmployeeDao {
 	/*
@@ -56,7 +61,51 @@ public class EmployeeDao {
 		 * The sample code returns "success" by default.
 		 * You need to handle the database insertion of the employee details and return "success" or "failure" based on result of the database insertion.
 		 */
-		
+		/*
+		 * 2019年，5月1日，csc于下午一点修改
+		 */
+		Connection connection = null;
+		Statement statement = null;
+		try {
+			connection = DriverManager.getConnection("jdbc:mysql://107.155.113.86:3306/STOCKSYSTEM?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC",
+					"cse305", "CSE305XYZ");
+			connection.setAutoCommit(true);
+			connection.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
+			statement = connection.createStatement();
+			String sql = "INSERT INTO Registration"+"VALUES ("+
+							employee.getEmployeeID()+""+
+							employee.getHourlyRate()+""+
+							employee.getLevel()+""+
+							employee.getStartDate()+""+
+							employee.getAddress()+""+
+							employee.getEmail()+""+
+							employee.getFirstName()+""+
+							employee.getId()+""+
+							employee.getLastName()+""+
+							employee.getSsn()+""+
+							employee.getTelephone()+""+
+							employee.getLocation();
+			statement.execute(sql);
+
+		}catch(SQLException se){
+			se.printStackTrace();
+		}catch(Exception e) {
+			//Handle errors for Class.forName
+			e.printStackTrace();
+		}finally{
+			try{
+				if(statement!=null)
+					connection.close();
+			}catch(SQLException se){
+				//我tm怎么知道要干嘛
+			}
+			try{
+				if(connection!=null)
+					connection.close();
+			}catch(SQLException se){
+				se.printStackTrace();
+			}
+		}
 		/*Sample data begins*/
 		return "success";
 		/*Sample data ends*/
