@@ -75,7 +75,7 @@ public class SignUpDao {
 			preparedStatement.setString(3,initFirstName);
 			preparedStatement.setString(4,initAddress);
 			preparedStatement.setInt(5,Integer.parseInt(initZip));
-			preparedStatement.setInt(6,Integer.parseInt(initPhone));
+			preparedStatement.setLong(6,Long.parseLong(initPhone));
 			preparedStatement.setString(7,initUsername);
 			preparedStatement.executeUpdate();
 			// insert employee or customer
