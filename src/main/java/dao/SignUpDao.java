@@ -75,7 +75,7 @@ public class SignUpDao {
 				preparedStatement = connection.prepareStatement("INSERT INTO Location(ZipCode, City, State) VALUE (?,?,?)");
 				preparedStatement.setInt(1,Integer.parseInt(initZip));
 				preparedStatement.setString(2,initCity);
-				preparedStatement.setString(3,initCity);
+				preparedStatement.setString(3,initState);
 				preparedStatement.executeUpdate();
 			}
 			//insert person
@@ -104,19 +104,11 @@ public class SignUpDao {
 				preparedStatement.setString(3,currentTime);
 				preparedStatement.executeUpdate();
 				//System.out.println("added E");
-				Login login = new Login();
-				login.setUsername(initUsername);
-				login.setPassword(initPassowrd);
-				login.setRole(initRole);
-				LoginDao loginDao = new LoginDao();
-				String status = loginDao.addUser(login);
-				if (status.equals("fail")){
-					resultSet.close();
-					statement.close();
-					connection.close();
-					preparedStatement.close();
-					return null;
-				}
+				preparedStatement = connection.prepareStatement("INSERT INTO Login(EMAIL, PASSWORD, ROLE) VALUE (?,?,?)");
+				preparedStatement.setString(1,initUsername);
+				preparedStatement.setString(2,initPassowrd);
+				preparedStatement.setString(3,initRole);
+				preparedStatement.executeUpdate();
 				//System.out.println("added L");
 				connection.commit();
 			}else {

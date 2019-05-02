@@ -215,34 +215,13 @@ public class EmployeeDao {
 			connection.setAutoCommit(false); // only one transaction
 			connection.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
 			statement = connection.createStatement();
-			ResultSet resultSet = statement.executeQuery("SELECT * FROM Employee");
+			ResultSet resultSet = statement.executeQuery("SELECT ID FROM Employee");
 			while (resultSet.next()){
 				//construct employee
-				Employee employee = new Employee();
-				employee.setEmployeeID(resultSet.getString("ID"));
-				employee.setSsn(resultSet.getInt("SSN")+"");
-				employee.setHourlyRate(resultSet.getFloat("HourlyRate"));
-				employee.setLevel(resultSet.getString("Role"));
-				employee.setStartDate(resultSet.getString("StartDate"));
-				//find person
-				ResultSet findEmployee = statement.executeQuery(
-						"SELECT * FROM Person P WHERE P.SSN = "+Integer.parseInt(resultSet.getString("SSN")));
-				employee.setFirstName(findEmployee.getString("FirstName"));
-				employee.setLastName(findEmployee.getString("LastName"));
-				employee.setAddress(findEmployee.getString("Address"));
-				employee.setEmail(findEmployee.getString("Email"));
-				employee.setTelephone(findEmployee.getLong("Telephone")+"");
-				findEmployee.close();
-				//find location
-				ResultSet findLocation = statement.executeQuery("SELECT * FROM Location L WHERE L.ZipCode = "
-						+findEmployee.getInt("ZipCode"));
-				Location location = new Location();
-				location.setCity(findLocation.getString("City"));
-				location.setState(findLocation.getString("State"));
-				location.setZipCode(findLocation.getInt("ZipCode"));
-				employee.setLocation(location);
-				employees.add(employee);
-				findLocation.close();
+				Employee employee = getEmployee(resultSet.getInt("ID")+"");
+				if (employee!=null){
+					employees.add(employee);
+				}
 			}
 			//clean up
 			connection.commit();
@@ -298,32 +277,38 @@ public class EmployeeDao {
 			statement = connection.createStatement();
 			ResultSet resultSet = statement.executeQuery("SELECT * FROM Employee E WHERE E.ID = "+Integer.parseInt(employeeID));
 			while (resultSet.next()){
-				employee.setEmployeeID(resultSet.getString("ID"));
+				employee = new Employee();
+				employee.setEmployeeID(resultSet.getInt("ID")+"");
 				employee.setSsn(resultSet.getInt("SSN")+"");
 				employee.setHourlyRate(resultSet.getFloat("HourlyRate"));
 				employee.setLevel(resultSet.getString("Role"));
 				employee.setStartDate(resultSet.getString("StartDate"));
 				//find person
-				ResultSet findEmployee = statement.executeQuery(
+				ResultSet findEmployee = connection.createStatement().executeQuery(
 						"SELECT * FROM Person P WHERE P.SSN = "+Integer.parseInt(resultSet.getString("SSN")));
-				employee.setFirstName(findEmployee.getString("FirstName"));
-				employee.setLastName(findEmployee.getString("LastName"));
-				employee.setAddress(findEmployee.getString("Address"));
-				employee.setEmail(findEmployee.getString("Email"));
-				employee.setTelephone(findEmployee.getLong("Telephone")+"");
+				while (findEmployee.next()){
+					employee.setFirstName(findEmployee.getString("FirstName"));
+					employee.setLastName(findEmployee.getString("LastName"));
+					employee.setAddress(findEmployee.getString("Address"));
+					employee.setEmail(findEmployee.getString("Email"));
+					employee.setTelephone(findEmployee.getLong("Telephone")+"");
+					//find location
+					ResultSet findLocation = connection.createStatement().executeQuery("SELECT * FROM Location L WHERE L.ZipCode = "
+							+findEmployee.getInt("ZipCode"));
+					while (findLocation.next()){
+						Location location = new Location();
+						location.setCity(findLocation.getString("City"));
+						location.setState(findLocation.getString("State"));
+						location.setZipCode(findLocation.getInt("ZipCode"));
+						employee.setLocation(location);
+					}
+					findLocation.close();
+				}
 				findEmployee.close();
-				//find location
-				ResultSet findLocation = statement.executeQuery("SELECT * FROM Location L WHERE L.ZipCode = "
-						+findEmployee.getInt("ZipCode"));
-				Location location = new Location();
-				location.setCity(findLocation.getString("City"));
-				location.setState(findLocation.getString("State"));
-				location.setZipCode(findLocation.getInt("ZipCode"));
-				employee.setLocation(location);
-				findLocation.close();
 			}
 			//clean up
 			connection.commit();
+
 			resultSet.close();
 			statement.close();
 			connection.close();
