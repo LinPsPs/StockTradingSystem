@@ -47,9 +47,10 @@ public class UpdateEmployeeController extends HttpServlet {
 		int zipcode = Integer.parseInt(request.getParameter("employeeZipcode"));
 		String telephone = request.getParameter("employeeTelephone");
 		String ssn = request.getParameter("employeeSSN");
+		String employeeID = request.getParameter("employeeID");
 		String startDate = request.getParameter("employeeStartDate");
 		float hourlyRate = Float.parseFloat(request.getParameter("employeeHourlyRate"));
-
+		String level = request.getParameter("role");
 		Location location = new Location();
 		location.setCity(city);
 		location.setState(state);
@@ -66,6 +67,8 @@ public class UpdateEmployeeController extends HttpServlet {
 		employee.setSsn(ssn);
 		employee.setHourlyRate(hourlyRate);
         employee.setLocation(location);
+        employee.setLevel(level);
+        employee.setEmployeeID(employeeID);
 
 		EmployeeDao employeeDao = new EmployeeDao();
 		String result = employeeDao.editEmployee(employee);

@@ -24,7 +24,7 @@
 	<form action="updateEmployee" method="POST">
         <div class="form-group">
 			<label for="employeeID">Empolyee ID</label>
-			<input type="text" class="form-control" id="employeeID" name="employeeSSN" placeholder="XXX-XX-XXXX" value=${editEmployee.employeeID} readonly>
+			<input type="text" class="form-control" id="employeeID" name="employeeID" placeholder="XXX-XX-XXXX" value=${editEmployee.employeeID} readonly>
 		</div>
         <div class="form-group">
             <label for="employeeSSN">Empolyee SSN</label>
@@ -39,7 +39,7 @@
 	    <input type="text" class="form-control" id="employeeFirstName" name="employeeFirstName" placeholder="First Name" value=${editEmployee.firstName} required>
 	  </div>
   	  <div class="form-group">
-	    <label for="employeeLastName">last Name</label>
+	    <label for="employeeLastName">Last Name</label>
 	    <input type="text" class="form-control" id="employeeLastName" name="employeeLastName" placeholder="Last Name" value=${editEmployee.lastName} required>
 	  </div>
    	  <div class="form-group">
@@ -56,19 +56,19 @@
 	  </div>
    	  <div class="form-group">
 	    <label for="employeeZipcode">Zipcode</label>
-	    <input type="text" class="form-control" id="employeeZipcode" name="employeeZipcode" placeholder="Zipcode" value=${editEmployee.location.zipCode} required>
+	    <input type="number" class="form-control" id="employeeZipcode" name="employeeZipcode" placeholder="Zipcode" value=${editEmployee.location.zipCode} required>
 	  </div>
    	  <div class="form-group">
 	    <label for="employeeTelephone">Telephone</label>
-	    <input type="text" class="form-control" id="employeeTelephone" name="employeeTelephone" placeholder="Telephone number" value=${editEmployee.telephone} required>
+	    <input type="tel" class="form-control" id="employeeTelephone" name="employeeTelephone" placeholder="Telephone number" pattern="[0-9]{10}" value=${editEmployee.telephone} required>
 	  </div>
    	  <div class="form-group">
 	    <label for="employeeStartDate">Start Date</label>
-	    <input type="text" class="form-control" id="employeeStartDate" name="employeeStartDate" placeholder="YYYY-MM-DD" value=${editEmployee.startDate} required>
+	    <input type="text" class="form-control" id="employeeStartDate" name="employeeStartDate" placeholder="YYYY-MM-DD" pattern="[0-9]{4}-[0-9]{2}-[0-9]{2}"  value=${editEmployee.startDate} required>
 	  </div>
    	  <div class="form-group">
 	    <label for="employeeHourlyRate">Hourly Rate</label>
-	    <input type="text" class="form-control" id="employeeHourlyRate" name="employeeHourlyRate" placeholder="Hourly Rate" value=${editEmployee.hourlyRate} required>
+	    <input type="number" class="form-control" id="employeeHourlyRate" name="employeeHourlyRate" placeholder="Hourly Rate" value=${editEmployee.hourlyRate} required>
 	  </div>
         <div class="form-group">
             <label for="employeeRole" >Role</label>

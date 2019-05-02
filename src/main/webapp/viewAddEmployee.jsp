@@ -63,7 +63,7 @@
         </div>
         <div class="form-group">
             <label for="employeeHourlyRate">Hourly Rate</label>
-            <input type="text" class="form-control" id="employeeHourlyRate" name="employeeHourlyRate"
+            <input type="number" class="form-control" id="employeeHourlyRate" name="employeeHourlyRate"
                    placeholder="Hourly Rate" required>
         </div>
         <div class="form-group">

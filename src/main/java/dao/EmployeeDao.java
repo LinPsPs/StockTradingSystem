@@ -85,7 +85,7 @@ public class EmployeeDao {
 				statement.close();
 				preparedStatement.close();
 				connection.close();
-				return "fail";
+				return "failure";
 			}
 			//check location exist or not
 			int  tempZip = -1;
@@ -160,7 +160,7 @@ public class EmployeeDao {
 				System.out.println(se3.getMessage());
 			}
 		}
-		return "fail";
+		return "failure";
 		/*Sample data ends*/
 
 	}
@@ -175,7 +175,105 @@ public class EmployeeDao {
 		 */
 		
 		/*Sample data begins*/
-		return "success";
+		Connection connection = null;
+		Statement statement = null;
+		PreparedStatement preparedStatement = null;
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			connection = DriverManager.getConnection("jdbc:mysql://107.155.113.86:3306/STOCKSYSTEM?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC",
+					"cse305", "CSE305XYZ");
+			connection.setAutoCommit(false); // only one transaction
+			connection.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
+			statement = connection.createStatement();
+			int tempSSN = -1;
+			//check emplyee table
+			ResultSet resultSet = statement.executeQuery(
+					"SELECT SSN FROM Employee E WHERE E.ID = "+employee.getEmployeeID());
+			while (resultSet.next()){
+				tempSSN = resultSet.getInt("SSN");
+			}
+			if (tempSSN == -1)
+				return "failure";
+			//update employee table
+			preparedStatement = connection.prepareStatement(
+					"UPDATE Employee E SET E.Role = ?, E.StartDate = ?, E.HourlyRate= ? " +
+							"WHERE E.ID = "+Integer.parseInt(employee.getEmployeeID()));
+			preparedStatement.setString(1,employee.getLevel());
+			preparedStatement.setString(2,employee.getStartDate());
+			preparedStatement.setFloat(3,employee.getHourlyRate());
+			preparedStatement.executeUpdate();
+			//update location table
+			int tempZip = -1;
+			resultSet = statement.executeQuery(
+					"SELECT ZipCode FROM Location L WHERE L.ZipCode = "+employee.getLocation().getZipCode());
+			while (resultSet.next()){
+				tempZip = resultSet.getInt("ZipCode");
+			}
+			//New location then add
+			if (tempZip==-1){
+				preparedStatement = connection.prepareStatement(
+						"INSERT INTO Location(ZipCode, City, State) VALUE (?,?,?)");
+				preparedStatement.setInt(1,employee.getLocation().getZipCode());
+				preparedStatement.setString(2,employee.getLocation().getCity());
+				preparedStatement.setString(3,employee.getLocation().getState());
+				preparedStatement.executeUpdate();
+			}
+			//update person table
+			preparedStatement = connection.prepareStatement(
+					"UPDATE Person P " +
+							"SET P.FirstName =?,P.LastName =?,P.Address =?,P.ZipCode =?,P.Email = ?,P.Telephone =? " +
+							"WHERE P.SSN = "+Integer.parseInt(employee.getSsn()));
+			preparedStatement.setString(1,employee.getFirstName());
+			preparedStatement.setString(2,employee.getLastName());
+			preparedStatement.setString(3,employee.getAddress());
+			preparedStatement.setInt(4,employee.getLocation().getZipCode());
+			preparedStatement.setString(5,employee.getEmail());
+			preparedStatement.setLong(6,Long.parseLong(employee.getTelephone()));
+			preparedStatement.executeUpdate();
+			//update login table
+			preparedStatement = connection.prepareStatement("UPDATE Login L SET L.Role =? " +
+					"WHERE L.Email = '"+employee.getEmail()+"'");
+			preparedStatement.setString(1,employee.getLevel());
+			preparedStatement.executeUpdate();
+
+			connection.commit();
+			resultSet.close();
+			preparedStatement.close();
+			statement.close();
+			connection.close();
+			return "success";
+
+		}catch(SQLException ex){
+			System.out.println(ex.getMessage());
+			try{
+				if (connection!=null)
+					connection.rollback();
+			}catch (Exception e){
+				System.out.println(e.getMessage());
+			}
+		} catch (Exception e){
+			System.out.println(e.getMessage());
+		}finally {
+			try{
+				if (statement!=null)
+					statement.close();
+			}catch (SQLException se2){
+				System.out.println(se2.getMessage());
+			}
+			try{
+				if (preparedStatement!=null)
+					preparedStatement.close();
+			}catch (SQLException s2){
+				System.out.println(s2.getMessage());
+			}
+			try{
+				if (connection!=null)
+					connection.close();
+			}catch (SQLException se3){
+				System.out.println(se3.getMessage());
+			}
+		}
+		return "failure";
 		/*Sample data ends*/
 
 	}
@@ -188,8 +286,67 @@ public class EmployeeDao {
 		 */
 		
 		/*Sample data begins*/
+		Connection connection = null;
+		Statement statement = null;
+		PreparedStatement preparedStatement = null;
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			connection = DriverManager.getConnection("jdbc:mysql://107.155.113.86:3306/STOCKSYSTEM?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC",
+					"cse305", "CSE305XYZ");
+			connection.setAutoCommit(false); // only one transaction
+			connection.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
+			statement = connection.createStatement();
+			int tempSSN = -1;
+			ResultSet resultSet = statement.executeQuery(
+					"SELECT SSN FROM Employee E WHERE E.ID = "+Integer.parseInt(employeeID));
+			while (resultSet.next()){
+				tempSSN = resultSet.getInt("SSN");
+			}
+			if (tempSSN==-1)
+				return "failure";
+			//employee exsit
+			preparedStatement = connection.prepareStatement("DELETE FROM Person WHERE Person.SSN = ?");
+			preparedStatement.setInt(1,tempSSN);
+			preparedStatement.executeUpdate();
 
-		return "success";
+			//clean
+			connection.commit();
+			resultSet.close();
+			preparedStatement.close();
+			statement.close();
+			connection.close();
+			return "success";
+		}catch(SQLException ex){
+			System.out.println(ex.getMessage());
+			try{
+				if (connection!=null)
+					connection.rollback();
+			}catch (Exception e){
+				System.out.println(e.getMessage());
+			}
+		} catch (Exception e){
+			System.out.println(e.getMessage());
+		}finally {
+			try{
+				if (statement!=null)
+					statement.close();
+			}catch (SQLException se2){
+				System.out.println(se2.getMessage());
+			}
+			try{
+				if (preparedStatement!=null)
+					preparedStatement.close();
+			}catch (SQLException s2){
+				System.out.println(s2.getMessage());
+			}
+			try{
+				if (connection!=null)
+					connection.close();
+			}catch (SQLException se3){
+				System.out.println(se3.getMessage());
+			}
+		}
+		return "failure";
 		/*Sample data ends*/
 
 	}
@@ -371,9 +528,11 @@ public class EmployeeDao {
 			ResultSet resultSet = statement.executeQuery("SELECT P.SSN FROM Person P WHERE P.Email = '"+username+"'");
 			while (resultSet.next()){
 				//find employee
-				ResultSet findEmployee = statement.executeQuery(
+				ResultSet findEmployee = connection.createStatement().executeQuery(
 						"SELECT E.ID FROM Employee E WHERE E.SSN = "+resultSet.getInt("SSN"));
-				employeeID = findEmployee.getInt("ID")+"";
+				while (findEmployee.next()) {
+					employeeID = findEmployee.getInt("ID") + "";
+				}
 				findEmployee.close();
 			}
 			//clean
