@@ -20,12 +20,16 @@
 	<c:if test="${empty editEmployee}">
 		<h3> Employee details not found! <h3/> 
 	</c:if>
-	<c:if test="${not empty editEmployee}"> 	
+	<c:if test="${not empty editEmployee}">
 	<form action="updateEmployee" method="POST">
         <div class="form-group">
 			<label for="employeeID">Empolyee ID</label>
 			<input type="text" class="form-control" id="employeeID" name="employeeSSN" placeholder="XXX-XX-XXXX" value=${editEmployee.employeeID} readonly>
 		</div>
+        <div class="form-group">
+            <label for="employeeSSN">Empolyee SSN</label>
+            <input type="text" class="form-control" id="employeeSSN" name="employeeSSN" placeholder="XXX-XX-XXXX" value=${editEmployee.ssn} readonly>
+        </div>
 	  <div class="form-group">
 	    <label for="employeeEmail">Email address</label>
 	    <input type="email" class="form-control" id="employeeEmail" name="employeeEmail" placeholder="Enter email" value=${editEmployee.email} required>
@@ -59,10 +63,6 @@
 	    <input type="text" class="form-control" id="employeeTelephone" name="employeeTelephone" placeholder="Telephone number" value=${editEmployee.telephone} required>
 	  </div>
    	  <div class="form-group">
-	    <label for="employeeSSN">SSN</label>
-	    <input type="text" class="form-control" id="employeeSSN" name="employeeSSN" placeholder="XXX-XX-XXXX" value=${editEmployee.ssn} >
-	  </div>
-   	  <div class="form-group">
 	    <label for="employeeStartDate">Start Date</label>
 	    <input type="text" class="form-control" id="employeeStartDate" name="employeeStartDate" placeholder="YYYY-MM-DD" value=${editEmployee.startDate} required>
 	  </div>
@@ -70,6 +70,31 @@
 	    <label for="employeeHourlyRate">Hourly Rate</label>
 	    <input type="text" class="form-control" id="employeeHourlyRate" name="employeeHourlyRate" placeholder="Hourly Rate" value=${editEmployee.hourlyRate} required>
 	  </div>
+        <div class="form-group">
+            <label for="employeeRole" >Role</label>
+            <select class="form-control" name="role" id= "employeeRole" >
+                <option value="manager">Manager</option>
+                <option value="customerRepresentative">Customer Representative</option>
+            </select>
+        </div>
+        <script>
+            setSelectedIndex(document.getElementById("employeeRole"), "${editEmployee.level}" );
+            function setSelectedIndex(s, valsearch)
+            {
+                // Loop through all the items in drop down list
+                for (i = 0; i< s.options.length; i++)
+                {
+                    if (s.options[i].value == valsearch)
+                    {
+                        // Item is found. Set its property and exit
+                        s.options[i].selected = true;
+
+                        break;
+                    }
+                }
+                return;
+            }
+        </script>
         <div class="form-group" style="text-align: center">
             <input type="submit" value="Update" class="btn btn-success"/>
             <input type="button" value="Cancel" class="btn btn-secondary" onclick="history.go(-1)"/>

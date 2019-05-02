@@ -21,6 +21,7 @@
                 <th>Email</th>
                 <th>Start Date</th>
                 <th>Hourly Rate</th>
+                <th>Role</th>
                 <th></th>
                 <th></th>
             </tr>
@@ -39,12 +40,13 @@
                     <td>${cd.email}</td>
                     <td>${cd.startDate}</td>
                     <td>${cd.hourlyRate}</td>
+                    <td>${cd.level}</td>
                     <td>
                         <form method="POST" action="editEmployee">
                             <div class="form-group">
                                 <input type="hidden" class="form-control" name="employeeID" value=${cd.employeeID}>
                             </div>
-                            <input type="submit" value="Edit" class="btn btn-success"/>
+                            <button type="submit" class="btn btn-success"><span class="fa fa-edit"></span> Edit</button>
                         </form>
                     </td>
                     <td>
@@ -52,7 +54,7 @@
                             <div class="form-group">
                                 <input type="hidden" class="form-control" name="employeeID" value=${cd.employeeID}>
                             </div>
-                            <input type="submit" value="Delete" class="btn btn-success"/>
+                                <button type="submit" class="btn btn-success"><span class="fa fa-remove"></span> Delete</button>
                         </form>
                     </td>
 

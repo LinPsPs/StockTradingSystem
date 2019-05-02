@@ -71,11 +71,11 @@
                 </div>
                 <div class="form-group">
                     <label >Phone Number</label>
-                    <input type="number" class="form-control" name="phone" placeholder="Telephone" required>
+                    <input type="tel" class="form-control" name="phone" placeholder="Telephone" pattern="[0-9]{10}" required>
                 </div>
 				<div class="form-group">
-                    <label >Social Security Number</label>
-					<input type="number" class="form-control" name="ssn" placeholder="XXX-XX-XXXX" required>
+                    <label >Social Security Number (No Dashes)</label>
+					<input type="tel" class="form-control" name="ssn" placeholder="XXX-XX-XXXX" pattern="[0-9]{9}" required>
 				</div>
 				<div class="form-group">
                     <label >Role</label>

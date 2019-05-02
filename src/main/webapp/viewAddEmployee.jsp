@@ -43,31 +43,39 @@
         </div>
         <div class="form-group">
             <label for="employeeZipcode">Zipcode</label>
-            <input type="text" class="form-control" id="employeeZipcode" name="employeeZipcode" placeholder="Zipcode"
+            <input type="number" class="form-control" id="employeeZipcode" name="employeeZipcode" placeholder="Zipcode"
                    required>
         </div>
         <div class="form-group">
             <label for="employeeTelephone">Telephone</label>
-            <input type="text" class="form-control" id="employeeTelephone" name="employeeTelephone"
-                   placeholder="Telephone number" required>
+            <input type="tel" class="form-control" id="employeeTelephone" name="employeeTelephone"
+                   placeholder="Telephone number" pattern="[0-9]{10}" required>
         </div>
         <div class="form-group">
-            <label for="employeeSSN">SSN</label>
-            <input type="text" class="form-control" id="employeeSSN" name="employeeSSN" placeholder="XXX-XX-XXXX"
-                   required>
+            <label for="employeeSSN">SSN (No Dashes)</label>
+            <input type="tel" class="form-control" id="employeeSSN" name="employeeSSN" placeholder="XXX-XX-XXXX"
+                   pattern="[0-9]{9}" required>
         </div>
         <div class="form-group">
             <label for="employeeStartDate">Start Date</label>
-            <input type="text" class="form-control" id="employeeStartDate" name="employeeStartDate"
-                   placeholder="YYYY-MM-DD" required>
+            <input type="tel" class="form-control" id="employeeStartDate" name="employeeStartDate"
+                   placeholder="YYYY-MM-DD" pattern="[0-9]{4}-[0-9]{2}-[0-9]{2}" required>
         </div>
         <div class="form-group">
             <label for="employeeHourlyRate">Hourly Rate</label>
             <input type="text" class="form-control" id="employeeHourlyRate" name="employeeHourlyRate"
                    placeholder="Hourly Rate" required>
         </div>
-
-        <button type="submit" class="btn btn-primary">Submit</button>
+        <div class="form-group">
+            <label >Role</label>
+            <select class="form-control" name="role">
+                <option value="manager">Manager</option>
+                <option value="customerRepresentative">Customer Representative</option>
+            </select>
+        </div>
+        <div class="form-group" style="text-align: center">
+            <button type="submit" class="btn btn-success">Add</button>
+        </div>
     </form>
 </div>
 <%@ include file="footer.jsp" %>

@@ -53,6 +53,7 @@ public class AddEmployeeController extends HttpServlet {
 		String ssn = request.getParameter("employeeSSN");
 		String startDate = request.getParameter("employeeStartDate");
 		float hourlyRate = Float.parseFloat(request.getParameter("employeeHourlyRate"));
+		String leve = request.getParameter("role");
 
 
         Location location = new Location();
@@ -71,6 +72,7 @@ public class AddEmployeeController extends HttpServlet {
 		employee.setSsn(ssn);
         employee.setLocation(location);
 		employee.setHourlyRate(hourlyRate);
+		employee.setLevel(leve);
 		
 		EmployeeDao employeeDao = new EmployeeDao();
 		String result = employeeDao.addEmployee(employee);
