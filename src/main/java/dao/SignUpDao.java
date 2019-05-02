@@ -1,5 +1,6 @@
 package dao;
 
+import model.Login;
 import model.SignUp;
 
 import java.sql.*;
@@ -22,7 +23,18 @@ public class SignUpDao {
 		 * password, which is the password of the user, is given as method parameter
 		 * Query to verify the username and password and fetch the role of the user, must be implemented
 		 */
-		
+		if (initPhone.length()!=10){
+			return null;
+		}
+		if (initSSN.length()!=9){
+			return null;
+		}
+		if (!(initRole.equals("manager")||initRole.equals("customerRepresentative"))){
+			return null;
+		}
+		if(initPassowrd.equals("")||initPassowrd==null){
+			return null;
+		}
 		/*Sample data begins*/
 		Connection connection = null;
 		Statement statement = null;
@@ -50,7 +62,7 @@ public class SignUpDao {
 			}
 			// if user does not exist
 			//check location existence
-			System.out.println(Integer.parseInt(initZip));
+			//System.out.println(Integer.parseInt(initZip));
 			int  tempZip = -1;
 			resultSet = statement.executeQuery("SELECT ZipCode " + "FROM Location L" +
 					" WHERE L.ZipCode = "+Integer.parseInt(initZip)+" ");
@@ -58,7 +70,7 @@ public class SignUpDao {
 				tempZip = resultSet.getInt("ZipCode");
 			}
 			//if location does not exist
-			System.out.println(tempZip);
+			//System.out.println(tempZip);
 			if (tempZip==-1){
 				preparedStatement = connection.prepareStatement("INSERT INTO Location(ZipCode, City, State) VALUE (?,?,?)");
 				preparedStatement.setInt(1,Integer.parseInt(initZip));
@@ -83,7 +95,7 @@ public class SignUpDao {
 			java.util.Date dt = new java.util.Date();
 			java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd");
 			String currentTime = sdf.format(dt);
-			if (initRole.equals("manager")||initRole.equals("customerRepresentative")||initRole.equals("customer")){
+			if (initRole.equals("manager")||initRole.equals("customerRepresentative")){
 				//manager
 				preparedStatement = connection.prepareStatement(
 						"INSERT INTO Employee(Role, SSN, StartDate) VALUE (?,?,?)");
@@ -91,13 +103,21 @@ public class SignUpDao {
 				preparedStatement.setInt(2,Integer.parseInt(initSSN));
 				preparedStatement.setString(3,currentTime);
 				preparedStatement.executeUpdate();
-				System.out.println("added E");
-				preparedStatement = connection.prepareStatement("INSERT INTO Login(EMAIL, PASSWORD, ROLE) VALUE (?,?,?)");
-				preparedStatement.setString(1,initUsername);
-				preparedStatement.setString(2,initPassowrd);
-				preparedStatement.setString(3,initRole);
-				preparedStatement.executeUpdate();
-				System.out.println("added L");
+				//System.out.println("added E");
+				Login login = new Login();
+				login.setUsername(initUsername);
+				login.setPassword(initPassowrd);
+				login.setRole(initRole);
+				LoginDao loginDao = new LoginDao();
+				String status = loginDao.addUser(login);
+				if (status.equals("fail")){
+					resultSet.close();
+					statement.close();
+					connection.close();
+					preparedStatement.close();
+					return null;
+				}
+				//System.out.println("added L");
 				connection.commit();
 			}else {
 				resultSet.close();

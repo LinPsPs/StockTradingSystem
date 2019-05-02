@@ -2,11 +2,9 @@ package dao;
 
 import model.Employee;
 import model.Location;
+import model.Login;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -61,53 +59,108 @@ public class EmployeeDao {
 		 * The sample code returns "success" by default.
 		 * You need to handle the database insertion of the employee details and return "success" or "failure" based on result of the database insertion.
 		 */
-		/*
-		 * 2019年，5月1日，csc于下午一点修改
-		 */
+		/*Sample data begins*/
 		Connection connection = null;
 		Statement statement = null;
+		PreparedStatement preparedStatement = null;
 		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
 			connection = DriverManager.getConnection("jdbc:mysql://107.155.113.86:3306/STOCKSYSTEM?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC",
 					"cse305", "CSE305XYZ");
-			connection.setAutoCommit(true);
+			connection.setAutoCommit(false); // only one transaction
 			connection.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
 			statement = connection.createStatement();
-			String sql = "INSERT INTO Registration"+"VALUES ("+
-							employee.getEmployeeID()+""+
-							employee.getHourlyRate()+""+
-							employee.getLevel()+""+
-							employee.getStartDate()+""+
-							employee.getAddress()+""+
-							employee.getEmail()+""+
-							employee.getFirstName()+""+
-							employee.getId()+""+
-							employee.getLastName()+""+
-							employee.getSsn()+""+
-							employee.getTelephone()+""+
-							employee.getLocation();
-			statement.execute(sql);
+			Location location = employee.getLocation();
+			//check employee exist or not
+			int tempSSN = -1;
+			ResultSet resultSet = statement.executeQuery(
+					"SELECT E.SSN FROM Employee E WHERE E.SSN = "+Integer.parseInt(employee.getSsn()));
+			while (resultSet.next()){
+				tempSSN = resultSet.getInt("SSN");
+			}
+			//fail to insert
+			if (tempSSN!=-1){
+				connection.rollback();
+				resultSet.close();
+				statement.close();
+				preparedStatement.close();
+				connection.close();
+				return "fail";
+			}
+			//check location exist or not
+			int  tempZip = -1;
+			resultSet = statement.executeQuery("SELECT ZipCode " + "FROM Location L" +
+					" WHERE L.ZipCode = "+location.getZipCode()+" ");
+			while (resultSet.next()){
+				tempZip = resultSet.getInt("ZipCode");
+			}
+			// if does not exist the add location
+			if (tempZip==-1){
+				preparedStatement = connection.prepareStatement("INSERT INTO Location(ZipCode, City, State) VALUE (?,?,?)");
+				preparedStatement.setInt(1,location.getZipCode());
+				preparedStatement.setString(2,location.getCity());
+				preparedStatement.setString(3,location.getState());
+				preparedStatement.executeUpdate();
+			}
+			//insert person
+			preparedStatement = connection.prepareStatement(
+					"INSERT INTO Person(SSN, LastName, FirstName, Address, ZipCode, Telephone, Email) VALUE " +
+							"(?,?,?,?,?,?,?)");
+			preparedStatement.setInt(1,Integer.parseInt(employee.getSsn()));
+			preparedStatement.setString(2,employee.getLastName());
+			preparedStatement.setString(3,employee.getFirstName());
+			preparedStatement.setString(4,employee.getAddress());
+			preparedStatement.setInt(5,location.getZipCode());
+			preparedStatement.setLong(6,Long.parseLong(employee.getTelephone()));
+			preparedStatement.setString(7,employee.getEmail());
+			preparedStatement.executeUpdate();
 
-		}catch(SQLException se){
-			se.printStackTrace();
-		}catch(Exception e) {
-			//Handle errors for Class.forName
-			e.printStackTrace();
-		}finally{
+			//insert employee
+			preparedStatement = connection.prepareStatement(
+					"INSERT INTO Employee(Role, SSN, StartDate) VALUE (?,?,?)");
+			preparedStatement.setString(1,employee.getLevel());
+			preparedStatement.setInt(2,Integer.parseInt(employee.getSsn()));
+			preparedStatement.setString(3,employee.getStartDate());
+			preparedStatement.executeUpdate();
+
+			//commit
+			connection.commit();
+			resultSet.close();
+			statement.close();
+			preparedStatement.close();
+			connection.close();
+			return "success";
+		}catch(SQLException ex){
+			System.out.println(ex.getMessage());
 			try{
-				if(statement!=null)
-					connection.close();
-			}catch(SQLException se){
-				//我tm怎么知道要干嘛
+				if (connection!=null)
+					connection.rollback();
+			}catch (Exception e){
+				System.out.println(e.getMessage());
+			}
+		} catch (Exception e){
+			System.out.println(e.getMessage());
+		}finally {
+			try{
+				if (statement!=null)
+					statement.close();
+			}catch (SQLException se2){
+				System.out.println(se2.getMessage());
 			}
 			try{
-				if(connection!=null)
+				if (preparedStatement!=null)
+					preparedStatement.close();
+			}catch (SQLException s2){
+				System.out.println(s2.getMessage());
+			}
+			try{
+				if (connection!=null)
 					connection.close();
-			}catch(SQLException se){
-				se.printStackTrace();
+			}catch (SQLException se3){
+				System.out.println(se3.getMessage());
 			}
 		}
-		/*Sample data begins*/
-		return "success";
+		return "fail";
 		/*Sample data ends*/
 
 	}
@@ -151,9 +204,76 @@ public class EmployeeDao {
 
 		List<Employee> employees = new ArrayList<Employee>();
 
-		Location location = new Location();
 
+		//connections
+		Connection connection = null;
+		Statement statement = null;
+		try{
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			connection = DriverManager.getConnection("jdbc:mysql://107.155.113.86:3306/STOCKSYSTEM?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC",
+					"cse305","CSE305XYZ");
+			connection.setAutoCommit(false); // only one transaction
+			connection.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
+			statement = connection.createStatement();
+			ResultSet resultSet = statement.executeQuery("SELECT * FROM Employee");
+			while (resultSet.next()){
+				//construct employee
+				Employee employee = new Employee();
+				employee.setEmployeeID(resultSet.getString("ID"));
+				employee.setSsn(resultSet.getInt("SSN")+"");
+				employee.setHourlyRate(resultSet.getFloat("HourlyRate"));
+				employee.setLevel(resultSet.getString("Role"));
+				employee.setStartDate(resultSet.getString("StartDate"));
+				//find person
+				ResultSet findEmployee = statement.executeQuery(
+						"SELECT * FROM Person P WHERE P.SSN = "+Integer.parseInt(resultSet.getString("SSN")));
+				employee.setFirstName(findEmployee.getString("FirstName"));
+				employee.setLastName(findEmployee.getString("LastName"));
+				employee.setAddress(findEmployee.getString("Address"));
+				employee.setEmail(findEmployee.getString("Email"));
+				employee.setTelephone(findEmployee.getLong("Telephone")+"");
+				findEmployee.close();
+				//find location
+				ResultSet findLocation = statement.executeQuery("SELECT * FROM Location L WHERE L.ZipCode = "
+						+findEmployee.getInt("ZipCode"));
+				Location location = new Location();
+				location.setCity(findLocation.getString("City"));
+				location.setState(findLocation.getString("State"));
+				location.setZipCode(findLocation.getInt("ZipCode"));
+				employee.setLocation(location);
+				employees.add(employee);
+				findLocation.close();
+			}
+			//clean up
+			connection.commit();
+			resultSet.close();
+			statement.close();
+			connection.close();
 
+		}catch(SQLException ex){
+			System.out.println(ex.getMessage());
+			try{
+				if (connection!=null)
+					connection.rollback();
+			}catch (Exception e){
+				System.out.println(e.getMessage());
+			}
+		} catch (Exception e){
+			System.out.println(e.getMessage());
+		}finally {
+			try{
+				if (statement!=null)
+					statement.close();
+			}catch (SQLException se2){
+				System.out.println(se2.getMessage());
+			}
+			try{
+				if (connection!=null)
+					connection.close();
+			}catch (SQLException se3){
+				System.out.println(se3.getMessage());
+			}
+		}
 		/*Sample data ends*/
 		
 		return employees;
@@ -166,8 +286,75 @@ public class EmployeeDao {
 		 * employeeID, which is the Employee's ID who's details have to be fetched, is given as method parameter
 		 * The record is required to be encapsulated as a "Employee" class object
 		 */
+		Connection connection = null;
+		Statement statement = null;
+		Employee employee = null;
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			connection = DriverManager.getConnection("jdbc:mysql://107.155.113.86:3306/STOCKSYSTEM?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC",
+					"cse305", "CSE305XYZ");
+			connection.setAutoCommit(false); // only one transaction
+			connection.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
+			statement = connection.createStatement();
+			ResultSet resultSet = statement.executeQuery("SELECT * FROM Employee E WHERE E.ID = "+Integer.parseInt(employeeID));
+			while (resultSet.next()){
+				employee.setEmployeeID(resultSet.getString("ID"));
+				employee.setSsn(resultSet.getInt("SSN")+"");
+				employee.setHourlyRate(resultSet.getFloat("HourlyRate"));
+				employee.setLevel(resultSet.getString("Role"));
+				employee.setStartDate(resultSet.getString("StartDate"));
+				//find person
+				ResultSet findEmployee = statement.executeQuery(
+						"SELECT * FROM Person P WHERE P.SSN = "+Integer.parseInt(resultSet.getString("SSN")));
+				employee.setFirstName(findEmployee.getString("FirstName"));
+				employee.setLastName(findEmployee.getString("LastName"));
+				employee.setAddress(findEmployee.getString("Address"));
+				employee.setEmail(findEmployee.getString("Email"));
+				employee.setTelephone(findEmployee.getLong("Telephone")+"");
+				findEmployee.close();
+				//find location
+				ResultSet findLocation = statement.executeQuery("SELECT * FROM Location L WHERE L.ZipCode = "
+						+findEmployee.getInt("ZipCode"));
+				Location location = new Location();
+				location.setCity(findLocation.getString("City"));
+				location.setState(findLocation.getString("State"));
+				location.setZipCode(findLocation.getInt("ZipCode"));
+				employee.setLocation(location);
+				findLocation.close();
+			}
+			//clean up
+			connection.commit();
+			resultSet.close();
+			statement.close();
+			connection.close();
+			return employee;
 
-		return getDummyEmployee();
+		}catch(SQLException ex){
+			System.out.println(ex.getMessage());
+			try{
+				if (connection!=null)
+					connection.rollback();
+			}catch (Exception e){
+				System.out.println(e.getMessage());
+			}
+		} catch (Exception e){
+			System.out.println(e.getMessage());
+		}finally {
+			try{
+				if (statement!=null)
+					statement.close();
+			}catch (SQLException se2){
+				System.out.println(se2.getMessage());
+			}
+			try{
+				if (connection!=null)
+					connection.close();
+			}catch (SQLException se3){
+				System.out.println(se3.getMessage());
+			}
+		}
+
+		return null;
 	}
 	
 	public Employee getHighestRevenueEmployee() {
@@ -176,7 +363,6 @@ public class EmployeeDao {
 		 * The students code to fetch employee data who generated the highest revenue will be written here
 		 * The record is required to be encapsulated as a "Employee" class object
 		 */
-		
 		return getDummyEmployee();
 	}
 
@@ -186,8 +372,56 @@ public class EmployeeDao {
 		 * username, which is the Employee's email address who's Employee ID has to be fetched, is given as method parameter
 		 * The Employee ID is required to be returned as a String
 		 */
+		Connection connection = null;
+		Statement statement = null;
+		String employeeID = null;
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			connection = DriverManager.getConnection("jdbc:mysql://107.155.113.86:3306/STOCKSYSTEM?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC",
+					"cse305", "CSE305XYZ");
+			connection.setAutoCommit(false); //
+			connection.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
+			statement = connection.createStatement();
+			ResultSet resultSet = statement.executeQuery("SELECT P.SSN FROM Person P WHERE P.Email = '"+username+"'");
+			while (resultSet.next()){
+				//find employee
+				ResultSet findEmployee = statement.executeQuery(
+						"SELECT E.ID FROM Employee E WHERE E.SSN = "+resultSet.getInt("SSN"));
+				employeeID = findEmployee.getInt("ID")+"";
+				findEmployee.close();
+			}
+			//clean
+			connection.commit();
+			resultSet.close();
+			statement.close();
+			connection.close();
+			return employeeID;
 
-		return "111-11-1111";
+		}catch(SQLException ex){
+			System.out.println(ex.getMessage());
+			try{
+				if (connection!=null)
+					connection.rollback();
+			}catch (Exception e){
+				System.out.println(e.getMessage());
+			}
+		} catch (Exception e){
+			System.out.println(e.getMessage());
+		}finally {
+			try{
+				if (statement!=null)
+					statement.close();
+			}catch (SQLException se2){
+				System.out.println(se2.getMessage());
+			}
+			try{
+				if (connection!=null)
+					connection.close();
+			}catch (SQLException se3){
+				System.out.println(se3.getMessage());
+			}
+		}
+		return null;
 	}
 
 }

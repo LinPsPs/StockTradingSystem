@@ -52,6 +52,7 @@ public class LoginDao {
             return null;
 
 		}catch(SQLException ex){
+			System.out.println(ex.getMessage());
 		    try{
 		        if (connection!=null)
 		            connection.rollback();
@@ -90,7 +91,49 @@ public class LoginDao {
 		 */
 		
 		/*Sample data begins*/
-		return "success";
+		Connection connection = null;
+		PreparedStatement preparedStatement = null;
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			connection = DriverManager.getConnection("jdbc:mysql://107.155.113.86:3306/STOCKSYSTEM?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC",
+					"cse305", "CSE305XYZ");
+			connection.setAutoCommit(false); // only one transaction
+			connection.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
+			preparedStatement = connection.prepareStatement("INSERT INTO Login(EMAIL, PASSWORD, ROLE) VALUE (?,?,?)");
+			preparedStatement.setString(1,login.getUsername());
+			preparedStatement.setString(2,login.getPassword());
+			preparedStatement.setString(3,login.getRole());
+			preparedStatement.executeUpdate();
+			//clean
+			connection.commit();
+			preparedStatement.close();
+			connection.close();
+			return "success";
+		}catch(SQLException ex){
+			System.out.println(ex.getMessage());
+			try{
+				if (connection!=null)
+					connection.rollback();
+			}catch (Exception e){
+				System.out.println(e.getMessage());
+			}
+		} catch (Exception e){
+			System.out.println(e.getMessage());
+		}finally {
+			try{
+				if (preparedStatement!=null)
+					preparedStatement.close();
+			}catch (SQLException se2){
+				System.out.println(se2.getMessage());
+			}
+			try{
+				if (connection!=null)
+					connection.close();
+			}catch (SQLException se3){
+				System.out.println(se3.getMessage());
+			}
+		}
+		return "fail";
 		/*Sample data ends*/
 	}
 
