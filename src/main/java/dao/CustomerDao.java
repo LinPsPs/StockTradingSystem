@@ -3,6 +3,7 @@ package dao;
 import model.Customer;
 import model.Location;
 
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -119,9 +120,103 @@ public class CustomerDao {
 		 * The sample code returns "success" by default.
 		 * You need to handle the database insertion of the customer details and return "success" or "failure" based on result of the database insertion.
 		 */
-		
+
+		Connection connection = null;
+		Statement statement = null;
+		PreparedStatement preparedStatement = null;
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			connection = DriverManager.getConnection("jdbc:mysql://107.155.113.86:3306/STOCKSYSTEM?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC",
+					"cse305", "CSE305XYZ");
+			connection.setAutoCommit(false); // only one transaction
+			connection.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
+			statement = connection.createStatement();
+			Location location = customer.getLocation();
+			//check customer exist or not
+			int tempSSN = -1;
+			ResultSet resultSet = statement.executeQuery(
+					"SELECT C.ID FROM Client C WHERE C.ID = "+Integer.parseInt(customer.getSsn()));
+			while (resultSet.next()){
+				tempSSN = resultSet.getInt("SSN");
+			}
+			//fail to insert
+			if (tempSSN!=-1){
+				connection.rollback();
+				resultSet.close();
+				statement.close();
+				preparedStatement.close();
+				connection.close();
+				return "failure";
+			}
+			//check location exist or not
+			int  tempZip = -1;
+			resultSet = statement.executeQuery("SELECT ZipCode " + "FROM Location L" +
+					" WHERE L.ZipCode = "+location.getZipCode()+" ");
+			while (resultSet.next()){
+				tempZip = resultSet.getInt("ZipCode");
+			}
+			// if does not exist the add location
+			if (tempZip==-1){
+				preparedStatement = connection.prepareStatement("INSERT INTO Location(ZipCode, City, State) VALUE (?,?,?)");
+				preparedStatement.setInt(1,location.getZipCode());
+				preparedStatement.setString(2,location.getCity());
+				preparedStatement.setString(3,location.getState());
+				preparedStatement.executeUpdate();
+			}
+			//先插入一个person
+			preparedStatement = connection.prepareStatement(
+					"INSERT INTO Person(SSN, LastName, FirstName, Address, ZipCode, Telephone, Email) VALUE " +
+							"(?,?,?,?,?,?,?)");
+			preparedStatement.setInt(1,Integer.parseInt(customer.getSsn()));
+			preparedStatement.setString(2,customer.getLastName());
+			preparedStatement.setString(3,customer.getFirstName());
+			preparedStatement.setString(4,customer.getAddress());
+			preparedStatement.setInt(5,location.getZipCode());
+			preparedStatement.setLong(6,Long.parseLong(customer.getTelephone()));
+			preparedStatement.setString(7,customer.getEmail());
+			preparedStatement.executeUpdate();
+
+			//insert customer
+			preparedStatement = connection.prepareStatement(
+					"INSERT INTO Client(Email, Rating, CreditCardNumber, Id) VALUE (?,?,?,?)");
+			preparedStatement.setString(1,customer.getEmail());
+			preparedStatement.setInt(2,customer.getRating());
+			preparedStatement.setString(3,customer.getCreditCard());
+			preparedStatement.setString(4,customer.getId());
+			preparedStatement.executeUpdate();
+
+			//commit
+			connection.commit();
+			resultSet.close();
+			statement.close();
+			preparedStatement.close();
+			connection.close();
+			return "success";
+		}catch(SQLException se){
+			se.printStackTrace();
+			return "fail";
+		}catch(Exception e) {
+			//Handle errors for Class.forName
+			e.printStackTrace();
+			return "fail";
+		}finally{
+			try{
+				if(statement!=null)
+					connection.close();
+			}catch(SQLException se){
+				//我tm怎么知道要干嘛
+			}
+			try{
+				if(connection!=null)
+					connection.close();
+			}catch(SQLException se){
+				se.printStackTrace();
+			}
+			return "success";
+		}
+
 		/*Sample data begins*/
-		return "success";
+//		return "success";
 		/*Sample data ends*/
 
 	}
