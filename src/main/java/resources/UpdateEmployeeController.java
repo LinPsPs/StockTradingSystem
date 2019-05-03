@@ -74,7 +74,7 @@ public class UpdateEmployeeController extends HttpServlet {
 		String result = employeeDao.editEmployee(employee);
 		
 		if(result.equals("success")) {
-			response.sendRedirect("getEmployees?status=editEmployeeSuccess");
+			response.sendRedirect("managerHome.jsp?status=editEmployeeSuccess");
 		}
 		else {
 			response.sendRedirect("editEmployee.jsp?status=error");

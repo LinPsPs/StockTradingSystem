@@ -21,7 +21,27 @@
         }
 
     %>
-
+    <%
+        String status = request.getParameter("status");
+        if(status != null) {
+            if(status.equals("editEmployeeSuccess")) {%>
+                <div class="alert alert-success" role="alert" style="text-align: center">
+                    Update Employee Success!
+                </div>
+            <%} else if (status.equals("deleteSuccess")){%>
+                <div class="alert alert-success" role="alert" style="text-align: center">
+                    Delete Employee Success!
+                </div>
+            <%} else if (status.equals("addEmployeeSuccess")){%>
+                <div class="alert alert-success" role="alert" style="text-align: center">
+                    Add Employee Success!
+                </div>
+            <%}else if (status.equals("deleteFailure")){%>
+                <div class="alert alert-danger" role="alert" style="text-align: center">
+                    Delete Employee Fail!
+                </div>
+            <%}
+    }%>
     <div class="row">
         <div class="col">
             <div class="card">

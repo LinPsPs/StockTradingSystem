@@ -109,7 +109,7 @@
         </script>
         <div class="form-group" style="text-align: center">
             <input type="submit" value="Update" class="btn btn-success"/>
-            <input type="button" value="Cancel" class="btn btn-secondary" onclick="location.href('getEmployees?')" />
+            <input type="button" value="Cancel" class="btn btn-secondary" onclick="history.go(-1)" />
         </div>
 	</form>
 	</c:if>

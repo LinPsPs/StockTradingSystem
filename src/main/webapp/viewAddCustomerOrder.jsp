@@ -3,7 +3,20 @@
 <%@ include file="header.jsp" %>
 <div class="container">
     <h2>Add order</h2>
-
+    <%
+        String status = request.getParameter("status");
+        if(status != null) {
+            if(status.equals("error")) {%>
+    <div class="alert alert-danger" role="alert" style="text-align: center">
+        Update Failed! Please Check Input Again!
+    </div>
+    <%}
+    else {%>
+    <div class="alert alert-danger" role="alert" style="text-align: center">
+        Some Error Occurred! Please Try Again!
+    </div>
+    <%}
+    }%>
 	<form action="addOrder" method="POST">
 	  <div class="form-group">
 	    <label for="orderType">Order Type</label>
