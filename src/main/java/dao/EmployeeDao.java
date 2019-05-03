@@ -186,7 +186,7 @@ public class EmployeeDao {
 			connection.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
 			statement = connection.createStatement();
 			int tempSSN = -1;
-			//check emplyee table
+			//check employee table
 			ResultSet resultSet = statement.executeQuery(
 					"SELECT SSN FROM Employee E WHERE E.ID = "+employee.getEmployeeID());
 			while (resultSet.next()){

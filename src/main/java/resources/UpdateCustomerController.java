@@ -60,7 +60,7 @@ public class UpdateCustomerController extends HttpServlet {
 		customer.setLastName(lastName);
 		customer.setAddress(address);
 		customer.setTelephone(telephone);
-		customer.setId(ssn);
+		customer.setClientId(ssn);
 		customer.setSsn(ssn);
 		customer.setCreditCard(creditCard);
 		customer.setRating(rating);

@@ -45,7 +45,7 @@
                             <div class="form-group">
                                 <input type="hidden" class="form-control" name="customerId" value=${cd.clientId}>
                             </div>
-                            <input type="submit" value="Suggestions" class="btn btn-success"/>
+                            <button type="submit" class="btn btn-success"><span class="fa fa-heart"></span> Suggestion</button>
                         </form>
                     </td>
                     <td>
@@ -53,7 +53,7 @@
                             <div class="form-group">
                                 <input type="hidden" class="form-control" name="customerId" value=${cd.clientId}>
                             </div>
-                            <input type="submit" value="Edit" class="btn btn-success"/>
+                            <button type="submit" class="btn btn-success"><span class="fa fa-edit"></span> Edit</button>
                         </form>
                     </td>
                     <td>
@@ -61,7 +61,7 @@
                             <div class="form-group">
                                 <input type="hidden" class="form-control" name="customerId" value=${cd.clientId}>
                             </div>
-                            <input type="submit" value="Delete" class="btn btn-success"/>
+                            <button type="submit" class="btn btn-success"><span class="fa fa-remove"></span> Delete</button>
                         </form>
                     </td>
                 </tr>

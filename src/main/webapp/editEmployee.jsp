@@ -13,9 +13,21 @@
 	This page displays fields to edit an Employee 
 	The details are sent to the UpdateEmployeeController class in resources package
 -->
-
 	<div class="container">
-	
+		<%
+			String status = request.getParameter("status");
+			if(status != null) {
+				if(status.equals("error")) {%>
+		<div class="alert alert-danger" role="alert" style="text-align: center">
+			Update Failed! Please Check Input Again!
+		</div>
+		<%}
+		else {%>
+		<div class="alert alert-danger" role="alert" style="text-align: center">
+			Some Error Occurred! Please Try Again!
+		</div>
+		<%}
+		}%>
 	<h1>Edit Employee:</h1>
 	<c:if test="${empty editEmployee}">
 		<h3> Employee details not found! <h3/> 
@@ -97,7 +109,7 @@
         </script>
         <div class="form-group" style="text-align: center">
             <input type="submit" value="Update" class="btn btn-success"/>
-            <input type="button" value="Cancel" class="btn btn-secondary" onclick="history.go(-1)"/>
+            <input type="button" value="Cancel" class="btn btn-secondary" onclick="location.href('getEmployees?')" />
         </div>
 	</form>
 	</c:if>

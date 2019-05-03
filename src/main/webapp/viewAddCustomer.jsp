@@ -60,7 +60,9 @@ The details are sent to the AddCustomerController class in resources package
 			<input type="text" class="form-control" id="customerRating" name="customerRating" placeholder="Rating" pattern="[0-9]{1}"required>
 		</div>
 
-		<button type="submit" class="btn btn-primary">Submit</button>
+		<div class="form-group" style="text-align: center">
+			<button type="submit" class="btn btn-success">Add</button>
+		</div>
 	</form>
 </div>
 

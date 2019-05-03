@@ -44,7 +44,7 @@
 					<%}
 					else {%>
 					<div class="alert alert-danger" role="alert" style="text-align: center">
-						Some Error Occured! Please Try Again!
+						Some Error Occurred! Please Try Again!
 					</div>
 					<%}
 					}

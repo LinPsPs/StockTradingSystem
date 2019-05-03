@@ -31,7 +31,7 @@
 					<%}
 					else {%>
                         <div class="alert alert-danger" role="alert" style="text-align: center">
-                            Fail to Sign Up! SSN or Email alreay exsit!
+                            Fail to Sign Up! SSN or Email already exist!
                         </div>
 					<%}
 				}
