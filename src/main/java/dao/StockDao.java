@@ -1,7 +1,9 @@
 package dao;
 
+import com.sun.org.apache.bcel.internal.generic.Select;
 import model.Stock;
 
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,18 +40,109 @@ public class StockDao {
 		 * Return list of actively traded stocks
 		 */
 
-        return getDummyStocks();
+		// NOT FINISH YET DO NOT USE IT!!!
 
+
+        Connection connection = null;
+        Statement statement = null;
+        PreparedStatement preparedStatement = null;
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            connection = DriverManager.getConnection("jdbc:mysql://107.155.113.86:3306/STOCKSYSTEM?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC",
+                    "cse305", "CSE305XYZ");
+            connection.setAutoCommit(false); // only one transaction
+            connection.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
+            statement = connection.createStatement();
+        }
+        catch(SQLException ex){
+            System.out.println(ex.getMessage());
+            try{
+                if (connection!=null)
+                    connection.rollback();
+            }
+            catch (Exception e){
+                System.out.println(e.getMessage());
+            }
+        }
+        catch (Exception e){
+            System.out.println(e.getMessage());
+        }
+        finally {
+            try{
+                if (statement!=null)
+                    statement.close();
+            }catch (SQLException se2){
+                System.out.println(se2.getMessage());
+            }
+            try{
+                if (preparedStatement!=null)
+                    preparedStatement.close();
+            }catch (SQLException s2){
+                System.out.println(s2.getMessage());
+            }
+            try{
+                if (connection!=null)
+                    connection.close();
+            }catch (SQLException se3){
+                System.out.println(se3.getMessage());
+            }
+        }
+        // Error case
+        return null;
     }
 
 	public List<Stock> getAllStocks() {
-		
+
 		/*
 		 * The students code to fetch data from the database will be written here
 		 * Return list of stocks
 		 */
-		
-		return getDummyStocks();
+        Connection connection = null;
+        Statement statement = null;
+        List<Stock> stocks = new ArrayList<Stock>();
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            connection = DriverManager.getConnection("jdbc:mysql://107.155.113.86:3306/STOCKSYSTEM?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC",
+                    "cse305", "CSE305XYZ");
+            connection.setAutoCommit(false); // only one transaction
+            connection.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
+            statement = connection.createStatement();
+            ResultSet rs = statement.executeQuery(
+                    "SELECT * FROM Stock"
+            );
+            while (rs.next()) {
+                Double pricePerShare = rs.getDouble("PricePerShare");
+                int totalShare = rs.getInt("TotalShare");
+                String companyName = rs.getString("CompanyName");
+                String stockSymbol = rs.getString("StockSymbol");
+                String type = rs.getString("Type");
+                Stock stock  = new Stock(companyName, stockSymbol, type, pricePerShare, totalShare);
+                stocks.add(stock);
+            }
+            return stocks;
+        }
+        catch(SQLException ex){
+            System.out.println(ex.getMessage());
+            try{
+                if (connection!=null)
+                    connection.rollback();
+            }
+            catch (Exception e){
+                System.out.println(e.getMessage());
+            }
+        }
+        catch (Exception e){
+            System.out.println(e.getMessage());
+        }
+        finally {
+            try {
+                if (statement != null)
+                    statement.close();
+            } catch (SQLException se2) {
+                System.out.println(se2.getMessage());
+            }
+        }
+		return null;
 
 	}
 
@@ -59,7 +152,54 @@ public class StockDao {
 		 * The students code to fetch data from the database will be written here
 		 * Return stock matching symbol
 		 */
-        return getDummyStock();
+        Connection connection = null;
+        Statement statement = null;
+        Stock stock = null;
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            connection = DriverManager.getConnection("jdbc:mysql://107.155.113.86:3306/STOCKSYSTEM?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC",
+                    "cse305", "CSE305XYZ");
+            connection.setAutoCommit(false); // only one transaction
+            connection.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
+            statement = connection.createStatement();
+            ResultSet rs = statement.executeQuery(
+                    "SELECT * FROM Stock WHERE StockSymbol = " + stockSymbol
+            );
+            while (rs.next()) {
+                String companyName = rs.getString("CompanyName");
+                Double pricePerShare = rs.getDouble("PricePerShare");
+                String type = rs.getString("Type");
+                int totalShare = rs.getInt("TotalShare");
+                stock  = new Stock(companyName, stockSymbol, type, pricePerShare, totalShare);
+            }
+            connection.commit();
+            rs.close();
+            statement.close();
+            connection.close();
+            return stock;
+        }
+        catch(SQLException ex){
+            System.out.println(ex.getMessage());
+            try{
+                if (connection!=null)
+                    connection.rollback();
+            }
+            catch (Exception e){
+                System.out.println(e.getMessage());
+            }
+        }
+        catch (Exception e){
+            System.out.println(e.getMessage());
+        }
+        finally {
+            try {
+                if (statement != null)
+                    statement.close();
+            } catch (SQLException se2) {
+                System.out.println(se2.getMessage());
+            }
+        }
+        return null;
     }
 
     public String setStockPrice(String stockSymbol, double stockPrice) {
@@ -70,7 +210,7 @@ public class StockDao {
 
         return "success";
     }
-	
+
 	public List<Stock> getOverallBestsellers() {
 
 		/*
@@ -99,7 +239,6 @@ public class StockDao {
 		 * The students code to fetch data from the database will be written here
 		 * Get stockHoldings of customer with customerId
 		 */
-        
 		return getDummyStocks();
 	}
 
@@ -109,8 +248,56 @@ public class StockDao {
 		 * The students code to fetch data from the database will be written here
 		 * Return list of stocks matching "name"
 		 */
-
-        return getDummyStocks();
+        Connection connection = null;
+        Statement statement = null;
+        List<Stock> stockList = new ArrayList<Stock>();
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            connection = DriverManager.getConnection("jdbc:mysql://107.155.113.86:3306/STOCKSYSTEM?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC",
+                    "cse305", "CSE305XYZ");
+            connection.setAutoCommit(false); // only one transaction
+            connection.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
+            statement = connection.createStatement();
+            ResultSet rs = statement.executeQuery(
+                    "SELECT * FROM Stock WHERE CompanyName LIKE '%" + name + "%'"
+            );
+            while (rs.next()) {
+                String stockSymbol = rs.getString("StockSymbol");
+                Double pricePerShare = rs.getDouble("PricePerShare");
+                String companyName = rs.getString("CompanyName");
+                String type = rs.getString("Type");
+                int totalShare = rs.getInt("TotalShare");
+                Stock stock  = new Stock(companyName, stockSymbol, type, pricePerShare, totalShare);
+                stockList.add(stock);
+            }
+            connection.commit();
+            rs.close();
+            statement.close();
+            connection.close();
+            return stockList;
+        }
+        catch(SQLException ex){
+            System.out.println(ex.getMessage());
+            try{
+                if (connection!=null)
+                    connection.rollback();
+            }
+            catch (Exception e){
+                System.out.println(e.getMessage());
+            }
+        }
+        catch (Exception e){
+            System.out.println(e.getMessage());
+        }
+        finally {
+            try {
+                if (statement != null)
+                    statement.close();
+            } catch (SQLException se2) {
+                System.out.println(se2.getMessage());
+            }
+        }
+        return null;
     }
 
     public List<Stock> getStockSuggestions(String customerID) {
@@ -140,12 +327,49 @@ public class StockDao {
 		 * The students code to fetch data from the database will be written here.
 		 * Populate types with stock types
 		 */
-
+        Connection connection = null;
+        Statement statement = null;
         List<String> types = new ArrayList<String>();
-        types.add("technology");
-        types.add("finance");
-        return types;
-
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            connection = DriverManager.getConnection("jdbc:mysql://107.155.113.86:3306/STOCKSYSTEM?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC",
+                    "cse305", "CSE305XYZ");
+            connection.setAutoCommit(false); // only one transaction
+            connection.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
+            statement = connection.createStatement();
+            ResultSet rs = statement.executeQuery(
+                    "SELECT S.Type From Stock S"
+            );
+            while(rs.next()) {
+                String type = rs.getString("Type");
+                if(!types.contains(type)) {
+                    types.add(type);
+                }
+            }
+            return types;
+        }
+        catch(SQLException ex){
+            System.out.println(ex.getMessage());
+            try{
+                if (connection!=null)
+                    connection.rollback();
+            }
+            catch (Exception e){
+                System.out.println(e.getMessage());
+            }
+        }
+        catch (Exception e){
+            System.out.println(e.getMessage());
+        }
+        finally {
+            try {
+                if (statement != null)
+                    statement.close();
+            } catch (SQLException se2) {
+                System.out.println(se2.getMessage());
+            }
+        }
+        return null;
     }
 
     public List<Stock> getStockByType(String stockType) {
@@ -154,7 +378,55 @@ public class StockDao {
 		 * The students code to fetch data from the database will be written here
 		 * Return list of stocks of type "stockType"
 		 */
-
-        return getDummyStocks();
+        Connection connection = null;
+        Statement statement = null;
+        List<Stock> stockList = new ArrayList<Stock>();
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            connection = DriverManager.getConnection("jdbc:mysql://107.155.113.86:3306/STOCKSYSTEM?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC",
+                    "cse305", "CSE305XYZ");
+            connection.setAutoCommit(false); // only one transaction
+            connection.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
+            statement = connection.createStatement();
+            ResultSet rs = statement.executeQuery(
+                    "SELECT * FROM Stock S WHERE S.Type = '" + stockType + "'"
+            );
+            while (rs.next()) {
+                String stockSymbol = rs.getString("StockSymbol");
+                Double pricePerShare = rs.getDouble("PricePerShare");
+                String companyName = rs.getString("CompanyName");
+                String type = rs.getString("Type");
+                int totalShare = rs.getInt("TotalShare");
+                Stock stock  = new Stock(companyName, stockSymbol, type, pricePerShare, totalShare);
+                stockList.add(stock);
+            }
+            connection.commit();
+            rs.close();
+            statement.close();
+            connection.close();
+            return stockList;
+        }
+        catch(SQLException ex){
+            System.out.println(ex.getMessage());
+            try{
+                if (connection!=null)
+                    connection.rollback();
+            }
+            catch (Exception e){
+                System.out.println(e.getMessage());
+            }
+        }
+        catch (Exception e){
+            System.out.println(e.getMessage());
+        }
+        finally {
+            try {
+                if (statement != null)
+                    statement.close();
+            } catch (SQLException se2) {
+                System.out.println(se2.getMessage());
+            }
+        }
+        return null;
     }
 }
