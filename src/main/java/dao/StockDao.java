@@ -111,7 +111,7 @@ public class StockDao {
                     "SELECT * FROM Stock"
             );
             while (rs.next()) {
-                Double pricePerShare = rs.getDouble("PricePerShare");
+                double pricePerShare = rs.getDouble("PricePerShare");
                 int totalShare = rs.getInt("TotalShare");
                 String companyName = rs.getString("CompanyName");
                 String stockSymbol = rs.getString("StockSymbol");
@@ -172,7 +172,7 @@ public class StockDao {
             );
             while (rs.next()) {
                 String companyName = rs.getString("CompanyName");
-                Double pricePerShare = rs.getDouble("PricePerShare");
+                double pricePerShare = rs.getDouble("PricePerShare");
                 String type = rs.getString("Type");
                 int totalShare = rs.getInt("TotalShare");
                 stock  = new Stock(companyName, stockSymbol, type, pricePerShare, totalShare);
@@ -339,7 +339,7 @@ public class StockDao {
             );
             while (rs.next()) {
                 String stockSymbol = rs.getString("StockSymbol");
-                Double pricePerShare = rs.getDouble("PricePerShare");
+                double pricePerShare = rs.getDouble("PricePerShare");
                 String companyName = rs.getString("CompanyName");
                 String type = rs.getString("Type");
                 int totalShare = rs.getInt("TotalShare");
@@ -383,7 +383,7 @@ public class StockDao {
 		 * Return stock suggestions for given "customerId"
 		 */
 
-        return getDummyStocks();
+        return null;
 
     }
 
@@ -469,7 +469,7 @@ public class StockDao {
             );
             while (rs.next()) {
                 String stockSymbol = rs.getString("StockSymbol");
-                Double pricePerShare = rs.getDouble("PricePerShare");
+                double pricePerShare = rs.getDouble("PricePerShare");
                 String companyName = rs.getString("CompanyName");
                 String type = rs.getString("Type");
                 int totalShare = rs.getInt("TotalShare");
