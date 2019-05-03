@@ -13,6 +13,16 @@ public class Stock {
 	private double price;
 	private int numShares;
 
+	public Stock(){};
+
+	public Stock(String name, String symbol, String type, double price, int numShares) {
+		this.name = name;
+		this.symbol = symbol;
+		this.type = type;
+		this.price = price;
+		this.numShares = numShares;
+	}
+
 	public String getSymbol() {
 		return symbol;
 	}
