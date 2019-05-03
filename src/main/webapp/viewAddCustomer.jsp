@@ -24,7 +24,7 @@ The details are sent to the AddCustomerController class in resources package
 			<input type="text" class="form-control" id="customerFirstName" name="customerFirstName" placeholder="First Name" required>
 		</div>
 		<div class="form-group">
-			<label for="customerLastName">last Name</label>
+			<label for="customerLastName">Last Name</label>
 			<input type="text" class="form-control" id="customerLastName" name="customerLastName" placeholder="Last Name" required>
 		</div>
 		<div class="form-group">
@@ -41,23 +41,23 @@ The details are sent to the AddCustomerController class in resources package
 		</div>
 		<div class="form-group">
 			<label for="customerZipcode">Zipcode</label>
-			<input type="text" class="form-control" id="customerZipcode" name="customerZipcode" placeholder="Zipcode" required>
+			<input type="number" class="form-control" id="customerZipcode" name="customerZipcode" placeholder="Zipcode" required>
 		</div>
 		<div class="form-group">
 			<label for="customerTelephone">Telephone</label>
-			<input type="text" class="form-control" id="customerTelephone" name="customerTelephone" placeholder="Telephone number" required>
+			<input type="tel" class="form-control" id="customerTelephone" name="customerTelephone" placeholder="Telephone number" pattern="[0-9]{10}" required>
 		</div>
 		<div class="form-group">
-			<label for="customerSSN">SSN</label>
-			<input type="text" class="form-control" id="customerSSN" name="customerSSN" placeholder="XXX-XX-XXXX" required>
+			<label for="customerSSN">SSN (No Dashes)</label>
+			<input type="text" class="form-control" id="customerSSN" name="customerSSN" placeholder="XXX-XX-XXXX"  pattern="[0-9]{9}" required>
 		</div>
 		<div class="form-group">
-			<label for="customerCreditCard">Credit Card Number</label>
-			<input type="text" class="form-control" id="customerCreditCard" name="customerCreditCard" placeholder="XXXX-XXXX-XXXX-XXXX" required>
+			<label for="customerCreditCard">Credit Card Number (No Dashes)</label>
+			<input type="text" class="form-control" id="customerCreditCard" name="customerCreditCard" placeholder="XXXX-XXXX-XXXX-XXXX"  pattern="[0-9]{16} required>
 		</div>
 		<div class="form-group">
-			<label for="customerRating">Rating</label>
-			<input type="text" class="form-control" id="customerRating" name="customerRating" placeholder="Rating" required>
+			<label for="customerRating">Rating (0-9)</label>
+			<input type="text" class="form-control" id="customerRating" name="customerRating" placeholder="Rating" pattern="[0-9]{1}"required>
 		</div>
 
 		<button type="submit" class="btn btn-primary">Submit</button>
