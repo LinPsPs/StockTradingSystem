@@ -376,7 +376,6 @@ public class CustomerDao {
 		 */
 		
 		/*Sample data begins*/
-		System.out.println("NOW, EDITING!!!");
 		Connection connection = null;
 		Statement statement = null;
 		PreparedStatement preparedStatement = null;
@@ -390,8 +389,10 @@ public class CustomerDao {
 			statement = connection.createStatement();
 			int tempSSN = -1;
 			//check client table
+//			System.out.println("test 1");
 			ResultSet resultSet = statement.executeQuery(
-					"SELECT Id FROM Client C WHERE C.Id = "+customer.getId());
+					"SELECT Id FROM Client C WHERE C.Id = "+customer.getClientId());
+
 			while (resultSet.next()){
 				tempSSN = resultSet.getInt("Id");
 			}
@@ -405,10 +406,12 @@ public class CustomerDao {
 			preparedStatement.setInt(2,customer.getRating());
 			preparedStatement.setString(3,customer.getCreditCard());
 			preparedStatement.executeUpdate();
+
 			//update location table
 			int tempZip = -1;
 			resultSet = statement.executeQuery(
 					"SELECT ZipCode FROM Location L WHERE L.ZipCode = "+customer.getLocation().getZipCode());
+
 			while (resultSet.next()){
 				tempZip = resultSet.getInt("ZipCode");
 			}
@@ -425,7 +428,7 @@ public class CustomerDao {
 			preparedStatement = connection.prepareStatement(
 					"UPDATE Person P " +
 							"SET P.FirstName =?,P.LastName =?,P.Address =?,P.ZipCode =?,P.Email = ?,P.Telephone =? " +
-							"WHERE P.SSN = "+Integer.parseInt(customer.getSsn()));
+							"WHERE P.SSN = "+Integer.parseInt(customer.getClientId()));
 			preparedStatement.setString(1,customer.getFirstName());
 			preparedStatement.setString(2,customer.getLastName());
 			preparedStatement.setString(3,customer.getAddress());
@@ -433,13 +436,9 @@ public class CustomerDao {
 			preparedStatement.setString(5,customer.getEmail());
 			preparedStatement.setLong(6,Long.parseLong(customer.getTelephone()));
 			preparedStatement.executeUpdate();
-			//update login table
-			preparedStatement = connection.prepareStatement("UPDATE Login L SET L.Role =? " +
-					"WHERE L.Email = '"+customer.getEmail()+"'");
-//			preparedStatement.setString(1,customer.getRating());
-			preparedStatement.executeUpdate();
 
 			connection.commit();
+
 			resultSet.close();
 			preparedStatement.close();
 			statement.close();
@@ -447,32 +446,38 @@ public class CustomerDao {
 			return "success";
 
 		}catch(SQLException ex){
+
 			System.out.println(ex.getMessage());
 			try{
 				if (connection!=null)
 					connection.rollback();
 			}catch (Exception e){
+//				System.out.println("qwe2");
 				System.out.println(e.getMessage());
 			}
 		} catch (Exception e){
+//			System.out.println("qwe3");
 			System.out.println(e.getMessage());
 		}finally {
 			try{
 				if (statement!=null)
 					statement.close();
 			}catch (SQLException se2){
+				System.out.println("qwe4");
 				System.out.println(se2.getMessage());
 			}
 			try{
 				if (preparedStatement!=null)
 					preparedStatement.close();
 			}catch (SQLException s2){
+
 				System.out.println(s2.getMessage());
 			}
 			try{
 				if (connection!=null)
 					connection.close();
 			}catch (SQLException se3){
+//				System.out.println("qwe6");
 				System.out.println(se3.getMessage());
 			}
 		}
