@@ -15,7 +15,7 @@
         </div>
         <div class="form-group">
             <label for="stockPrice">Price</label>
-            <input type="number" class="form-control" id="stockPrice" name="stockPrice" placeholder="160.0" required>
+            <input type="number" class="form-control" id="stockPrice" name="stockPrice" placeholder="New Price" required>
         </div>
         <button type="submit" class="btn btn-primary">Submit</button>
     </form>

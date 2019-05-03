@@ -119,6 +119,11 @@ public class StockDao {
                 Stock stock  = new Stock(companyName, stockSymbol, type, pricePerShare, totalShare);
                 stocks.add(stock);
             }
+            //clean up
+            connection.commit();
+            rs.close();
+            statement.close();
+            connection.close();
             return stocks;
         }
         catch(SQLException ex){
@@ -207,8 +212,79 @@ public class StockDao {
          * The students code to fetch data from the database will be written here
          * Perform price update of the stock symbol
          */
-
-        return "success";
+        Connection connection = null;
+        Statement statement = null;
+        PreparedStatement preparedStatement = null;
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            connection = DriverManager.getConnection("jdbc:mysql://107.155.113.86:3306/STOCKSYSTEM?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC",
+                    "cse305", "CSE305XYZ");
+            connection.setAutoCommit(false); // only one transaction
+            connection.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
+            statement = connection.createStatement();
+            //check stock existence
+            String tempStock = null;
+            ResultSet resultSet = statement.executeQuery("SELECT S.StockSymbol FROM Stock S WHERE S.StockSymbol = '"+stockSymbol+"'");
+            while (resultSet.next()){
+                tempStock = resultSet.getString("StockSymbol");
+            }
+            //is stock does not exist
+            if (tempStock==null){
+                connection.rollback();
+                resultSet.close();
+                statement.close();
+                connection.close();
+                return "failure";
+            }
+            //exist
+            preparedStatement = connection.prepareStatement("UPDATE Stock S" +
+                    " SET S.PricePerShare = ? WHERE S.StockSymbol = ?");
+            preparedStatement.setDouble(1,stockPrice);
+            //System.out.println(stockSymbol);
+            preparedStatement.setString(2,stockSymbol);
+            preparedStatement.executeUpdate();
+            //clean
+            connection.commit();
+            resultSet.close();
+            preparedStatement.close();
+            statement.close();
+            connection.close();
+            return "success";
+        }
+        catch(SQLException ex){
+            System.out.println(ex.getMessage());
+            try{
+                if (connection!=null)
+                    connection.rollback();
+            }
+            catch (Exception e){
+                System.out.println(e.getMessage());
+            }
+        }
+        catch (Exception e){
+            System.out.println(e.getMessage());
+        }
+        finally {
+            try{
+                if (statement!=null)
+                    statement.close();
+            }catch (SQLException se2){
+                System.out.println(se2.getMessage());
+            }
+            try{
+                if (preparedStatement!=null)
+                    preparedStatement.close();
+            }catch (SQLException s2){
+                System.out.println(s2.getMessage());
+            }
+            try{
+                if (connection!=null)
+                    connection.close();
+            }catch (SQLException se3){
+                System.out.println(se3.getMessage());
+            }
+        }
+        return "failure";
     }
 
 	public List<Stock> getOverallBestsellers() {
