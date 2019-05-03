@@ -23,11 +23,11 @@
 	<c:if test="${not empty editEmployee}">
 	<form action="updateEmployee" method="POST">
         <div class="form-group">
-			<label for="employeeID">Empolyee ID</label>
+			<label for="employeeID">Employee ID</label>
 			<input type="text" class="form-control" id="employeeID" name="employeeID" placeholder="XXX-XX-XXXX" value=${editEmployee.employeeID} readonly>
 		</div>
         <div class="form-group">
-            <label for="employeeSSN">Empolyee SSN</label>
+            <label for="employeeSSN">Employee SSN</label>
             <input type="text" class="form-control" id="employeeSSN" name="employeeSSN" placeholder="XXX-XX-XXXX" value=${editEmployee.ssn} readonly>
         </div>
 	  <div class="form-group">
@@ -36,23 +36,23 @@
 	  </div>
   	  <div class="form-group">
 	    <label for="employeeFirstName">First Name</label>
-	    <input type="text" class="form-control" id="employeeFirstName" name="employeeFirstName" placeholder="First Name" value=${editEmployee.firstName} required>
+	    <input type="text" class="form-control" id="employeeFirstName" name="employeeFirstName" placeholder="First Name" value="${editEmployee.firstName}" required>
 	  </div>
   	  <div class="form-group">
 	    <label for="employeeLastName">Last Name</label>
-	    <input type="text" class="form-control" id="employeeLastName" name="employeeLastName" placeholder="Last Name" value=${editEmployee.lastName} required>
+	    <input type="text" class="form-control" id="employeeLastName" name="employeeLastName" placeholder="Last Name" value="${editEmployee.lastName}" required>
 	  </div>
    	  <div class="form-group">
-	    <label for="employeeAddress">Address</label>
-	    <input type="text" class="form-control" id="employeeAddress" name="employeeAddress" placeholder="Address" value=${editEmployee.address} required>
+	    <label for="employeeAddress">Address </label>
+	    <input type="text" class="form-control" id="employeeAddress" name="employeeAddress" placeholder="Address" value="${editEmployee.address}" required>
 	  </div>
    	  <div class="form-group">
 	    <label for="employeeCity">City</label>
-	    <input type="text" class="form-control" id="employeeCity" name="employeeCity" placeholder="City" value=${editEmployee.location.city} required>
+	    <input type="text" class="form-control" id="employeeCity" name="employeeCity" placeholder="City" value="${editEmployee.location.city}" required>
 	  </div>
    	  <div class="form-group">
 	    <label for="employeeState">State</label>
-	    <input type="text" class="form-control" id="employeeState" name="employeeState" placeholder="State" value=${editEmployee.location.state} required>
+	    <input type="text" class="form-control" id="employeeState" name="employeeState" placeholder="State" value="${editEmployee.location.state}" required>
 	  </div>
    	  <div class="form-group">
 	    <label for="employeeZipcode">Zipcode</label>

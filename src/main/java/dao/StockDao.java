@@ -99,7 +99,7 @@ public class StockDao {
 		 * The students code to fetch data from the database will be written here
 		 * Get stockHoldings of customer with customerId
 		 */
-        
+
 		return getDummyStocks();
 	}
 

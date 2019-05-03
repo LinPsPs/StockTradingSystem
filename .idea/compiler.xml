@@ -6,8 +6,9 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="CSE305" />
+        <module name="CSE305Project" />
         <module name="Jsp" />
+        <module name="CSE305" />
       </profile>
     </annotationProcessing>
   </component>
