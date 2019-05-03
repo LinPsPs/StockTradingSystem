@@ -44,7 +44,7 @@ public class CustomerDao {
     }
 
     /**
-	 * @param String searchKeyword
+	 * @param /String  searchKeyword
 	 * @return ArrayList<Customer> object
 	 */
 	public List<Customer> getCustomers(String searchKeyword) {
@@ -54,7 +54,7 @@ public class CustomerDao {
 		
 
 		/*
-		 * The students code to fetch data from the database based on searchKeyword will be written here
+		 * The students code to fetch data from the database based on searc Keyword will be written here
 		 * Each record is required to be encapsulated as a "Customer" class object and added to the "customers" List
 		 */
 
@@ -141,16 +141,16 @@ public class CustomerDao {
 			connection.setAutoCommit(false); // only one transaction
 			connection.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
 			statement = connection.createStatement();
-			System.out.println(customerID);
+			//System.out.println(customerID);
 			ResultSet resultSet = statement.executeQuery("SELECT * FROM Client C WHERE C.Id = "+Integer.parseInt(customerID));
-			System.out.println("TEST MESSAGE7");
+			//System.out.println("TEST MESSAGE7");
 			while (resultSet.next()){
 				customer = new Customer();
 				customer.setClientId(resultSet.getInt("Id")+"");
-//				customer.setSsn(resultSet.getInt("SSN")+"");
+				//customer.setSsn(resultSet.getInt("SSN")+"");
 				customer.setCreditCard(resultSet.getString("CreditCardNumber"));
 				customer.setRating(resultSet.getInt("Rating"));
-//				customer.setEmail(resultSet.getString("Email"));
+				customer.setEmail(resultSet.getString("Email"));
 
 				//find person
 
@@ -159,9 +159,10 @@ public class CustomerDao {
 
 				while (findCustomer.next()){
 					customer.setFirstName(findCustomer.getString("FirstName"));
+					customer.setSsn(findCustomer.getInt("SSN")+"");
 					customer.setLastName(findCustomer.getString("LastName"));
 					customer.setAddress(findCustomer.getString("Address"));
-					customer.setEmail(findCustomer.getString("Email"));
+					//customer.setEmail(findCustomer.getString("Email"));
 					customer.setTelephone(findCustomer.getLong("Telephone")+"");
 					//find location
 					ResultSet findLocation = connection.createStatement().executeQuery("SELECT * FROM Location L WHERE L.ZipCode = "
@@ -186,8 +187,7 @@ public class CustomerDao {
 			return customer;
 
 		}catch(SQLException ex){
-			System.out.println("SQL EXCEPTION NOW, EDITING!!!");
-			System.out.println(ex.getMessage());
+			ex.printStackTrace();
 			try{
 				if (connection!=null)
 					connection.rollback();
@@ -196,7 +196,8 @@ public class CustomerDao {
 				System.out.println(e.getMessage());
 			}
 		} catch (Exception e){
-			System.out.println("SQL EXCEPTION NOW3, EDITING!!!");
+			//System.out.println("SQL EXCEPTION NOW3, EDITING!!!");
+			e.printStackTrace();
 			System.out.println(e.getMessage());
 		}finally {
 			try{
