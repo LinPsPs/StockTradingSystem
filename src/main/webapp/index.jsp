@@ -31,8 +31,8 @@
 				<div class="carousel-item">
 					<img src="./img/two.jpg" class="d-block w-100" alt="...">
 					<div class="carousel-caption d-none d-md-block">
-						<h5>Reliable</h5>
-						<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+						<h5 style="color: black">Reliable</h5>
+						<p style="color: black">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
 					</div>
 				</div>
 				<div class="carousel-item">
@@ -56,9 +56,31 @@
 	<div class="jumbotron mt-2" style="text-align: center;background: white">
 		<h1 class="display-4">Welcome to XYZ Online Stocking</h1>
 		<p class="lead">Our platform provides most simple, fast, and secure online stocking trading experience.</p>
+		<h1><img src="./img/xwyLogo.png"></h1>
 		<hr class="my-4">
 		<!--<p>It uses utility classes for typography and spacing to space content out within the larger container.</p>-->
-		<a class="btn btn-primary btn-lg" href="sign_up.jsp" role="button">Join Now</a>
+		<div class="card-deck">
+			<div class="card text-center">
+				<h1><img class="img-thumbnail rounded-circle mt-3" src="./img/fast_connection.png" height="128" width="128" alt="Card image cap"></h1>
+				<div class="card-body">
+					<h5 class="card-title align-content-center">Fast Connection</h5>
+				</div>
+			</div>
+			<div class="card text-center">
+				<h1><img class="img-thumbnail rounded-circle mt-3" src="./img/uptime.png" height="128" width="128" alt="Card image cap"></h1>
+				<div class="card-body">
+					<h5 class="card-title align-content-center"> Guarantee 100% Uptime</h5>
+				</div>
+			</div>
+			<div class="card text-center">
+				<h1><img class="img-thumbnail rounded-circle mt-3" src="./img/smart.png" height="128" width="128" alt="Card image cap"></h1>
+				<div class="card-body">
+					<h5 class="card-title align-content-center">Smart Suggestion</h5>
+				</div>
+			</div>
+		</div>
+		<a class="btn btn-primary btn-lg mt-5" href="sign_up.jsp" role="button">Join Now</a>
 	</div>
+
 </div>
 <%@ include file="footer.jsp" %>

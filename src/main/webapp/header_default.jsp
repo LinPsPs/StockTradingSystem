@@ -22,7 +22,10 @@
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-light bg-light mb-3">
-    <a class="navbar-brand" href="index.jsp">XYZ Online Trading</a>
+    <a class="navbar-brand" href="index.jsp">
+        <img src="./img/logo.png" alt="..." width="30" height="30">
+        XYZ Online Trading
+    </a>
         <div class="container">
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav">
