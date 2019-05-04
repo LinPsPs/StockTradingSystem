@@ -24,21 +24,21 @@
 				<div class="carousel-item active">
 					<img src="./img/one.jpg" class="d-block w-100" alt="...">
 					<div class="carousel-caption d-none d-md-block">
-						<h5>First slide label</h5>
+						<h5>Fast</h5>
 						<p>Nulla vitae elit libero, a pharetra augue mollis interdum.</p>
 					</div>
 				</div>
 				<div class="carousel-item">
 					<img src="./img/two.jpg" class="d-block w-100" alt="...">
 					<div class="carousel-caption d-none d-md-block">
-						<h5>Second slide label</h5>
+						<h5>Reliable</h5>
 						<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
 					</div>
 				</div>
 				<div class="carousel-item">
 					<img src="./img/three.jpg" class="d-block w-100" alt="...">
 					<div class="carousel-caption d-none d-md-block">
-						<h5>Third slide label</h5>
+						<h5>Smart</h5>
 						<p>Praesent commodo cursus magna, vel scelerisque nisl consectetur.</p>
 					</div>
 				</div>
@@ -53,7 +53,7 @@
 			</a>
 		</div>
 	</div>
-	<div class="Welcome"; style="text-align: center">
+	<div class="jumbotron mt-2" style="text-align: center;background: white">
 		<h1 class="display-4">Welcome to XYZ Online Stocking</h1>
 		<p class="lead">Our platform provides most simple, fast, and secure online stocking trading experience.</p>
 		<hr class="my-4">
