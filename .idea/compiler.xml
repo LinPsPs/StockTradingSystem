@@ -11,5 +11,8 @@
         <module name="CSE305" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="CSE305" target="1.5" />
+    </bytecodeTargetLevel>
   </component>
 </project>
