@@ -5,6 +5,7 @@
 
 <div class="container">
     <h2>Customer Options:</h2>
+    <hr>
     <%
         String email = (String)session.getAttribute("email");
         String role = (String)session.getAttribute("role");
@@ -23,45 +24,100 @@
             response.sendRedirect("index.jsp");
         }
     %>
-    <div class="row">
-    <div class="col">
-        <div class="card">
-          <div class="card-body">
-            <h5 class="card-title">Orders</h5>
-            <div class="container">
-                <form action="viewAddOrder">
-                    <input type="submit" value="Place Order" class="btn btn-success"/>
-                </form>
-
-                <form action="getOrdersByCustomer" class="pt-1">
-                    <input type="submit" value="Order History" class="btn btn-success"/>
-                </form>
+    <div class="row mt-2">
+        <div class="col">
+            <div class="card">
+                <div class="card-body">
+                    <div class="container">
+                        <div class="media" >
+                            <img src="./img/orders.png" width="64" height="64" class="mr-3 img-thumbnail" alt="...">
+                            <h5 class="mt-3">Orders</h5>
+                        </div>
+                        <hr>
+                        <div class="container">
+                            <div class="row">
+                                <div class="media">
+                                    <img src="./img/place_order_as_customer.png" width="64" height="64" class="mr-3 img-thumbnail" alt="...">
+                                    <form action="viewAddOrder" class="mt-3">
+                                        <input type="submit" value="Place Order" class="btn btn-success"/>
+                                    </form>
+                                </div>
+                            </div>
+                            <div class="row mt-1">
+                                <div class="media">
+                                    <img src="./img/order_history.png" width="64" height="64" class="mr-3 img-thumbnail" alt="...">
+                                    <form action="getOrdersByCustomer" class="mt-3">
+                                        <input type="submit" value="Order History" class="btn btn-success"/>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-          </div>
         </div>
     </div>
-    <div class="col">
-        <div class="card">
-          <div class="card-body">
-            <h5 class="card-title">Stocks</h5>
-            <div class="container">
-                <form action="getStocksByCustomer">
-                    <input type="submit" value="Current stock holdings" class="btn btn-success"/>
-                </form>
-                <form action="viewGetStockPriceHistory" class="pt-1">
-                    <input type="submit" value="Stock price history" class="btn btn-success"/>
-                </form>
-                <form action="viewSearchStocks" class="pt-1">
-                    <input type="submit" value="Search stocks" class="btn btn-success"/>
-                </form>
-                <form action="getCustomerBestsellers" class="pt-1">
-                    <input type="submit" value="View bestseller stocks" class="btn btn-success"/>
-                </form>
-                <form action="getStockSuggestions" class="pt-1">
-                    <input type="submit" value="View suggested stocks" class="btn btn-success"/>
-                </form>
+    <div class="row mt-2">
+        <div class="col">
+            <div class="card">
+                <div class="card-body">
+                    <div class="container">
+                        <div class="media">
+                            <img src="./img/stocks.png" width="64" height="64" class="mr-3 img-thumbnail" alt="...">
+                            <h5 class="mt-3">Stocks</h5>
+                        </div>
+                        <hr>
+                        <div class="container">
+                            <div class="row">
+                                <div class="col">
+                                    <div class="row">
+                                        <div class="media">
+                                            <img src="./img/current_stock_hold.png" width="64" height="64" class="mr-3 img-thumbnail" alt="...">
+                                            <form action="getStocksByCustomer" class="mt-3">
+                                                <input type="submit" value="Current stock holdings" class="btn btn-success"/>
+                                            </form>
+                                        </div>
+                                    </div>
+                                    <div class="row mt-1">
+                                        <div class="media">
+                                            <img src="./img/stock_price_history.png" width="64" height="64" class="mr-3 img-thumbnail" alt="...">
+                                            <form action="viewGetStockPriceHistory" class="mt-3">
+                                                <input type="submit" value="Stock price history" class="btn btn-success"/>
+                                            </form>
+                                        </div>
+                                    </div>
+                                    <div class="row mt-1">
+                                        <div class="media">
+                                            <img src="./img/search_stocks.png" width="64" height="64" class="mr-3 img-thumbnail" alt="...">
+                                            <form action="viewSearchStocks" class="mt-3">
+                                                <input type="submit" value="Search stocks" class="btn btn-success"/>
+                                            </form>
+                                        </div>
+                                    </div>
+                                    <div class="row mt-1">
+                                        <div class="media">
+                                            <img src="./img/view_best_sell_stock.png" width="64" height="64" class="mr-3 img-thumbnail" alt="...">
+                                            <form action="getCustomerBestsellers" class="mt-3">
+                                                <input type="submit" value="View bestseller stocks" class="btn btn-success"/>
+                                            </form>
+                                        </div>
+                                    </div>
+                                    <div class="row mt-1">
+                                        <div class="media">
+                                            <img src="./img/customer_suggestion.png" width="64" height="64" class="mr-3 img-thumbnail" alt="...">
+                                            <form action="getStockSuggestions" class="mt-3">
+                                                <input type="submit" value="View suggested stocks" class="btn btn-success"/>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-          </div>
         </div>
     </div>
 </div>
