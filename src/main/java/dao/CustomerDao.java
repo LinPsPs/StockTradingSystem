@@ -118,6 +118,9 @@ public class CustomerDao {
 		 * The students code to fetch data from the database will be written here
 		 * The customer record is required to be encapsulated as a "Customer" class object
 		 */
+		System.out.println("highest RevenueCustomer start!!");
+
+
 
 		return getDummyCustomer();
 	}
@@ -142,7 +145,8 @@ public class CustomerDao {
 			connection.setAutoCommit(false); // only one transaction
 			connection.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
 			statement = connection.createStatement();
-			//System.out.println(customerID);
+			System.out.println(customerID);
+//			System.out.println("qwe!!!");
 			ResultSet resultSet = statement.executeQuery("SELECT * FROM Client C WHERE C.Id = "+Integer.parseInt(customerID));
 			//System.out.println("TEST MESSAGE7");
 			while (resultSet.next()){
@@ -197,7 +201,7 @@ public class CustomerDao {
 				System.out.println(e.getMessage());
 			}
 		} catch (Exception e){
-			//System.out.println("SQL EXCEPTION NOW3, EDITING!!!");
+			System.out.println("SQL EXCEPTION NOW3, EDITING!!!");
 			e.printStackTrace();
 			System.out.println(e.getMessage());
 		}finally {
@@ -308,7 +312,7 @@ public class CustomerDao {
 		 * username, which is the email address of the customer, who's ID has to be returned, is given as method parameter
 		 * The Customer's ID is required to be returned as a String
 		 */
-		System.out.println("getCustomerID start!!");
+//		System.out.println("getCustomerID start!!");
 		Connection connection = null;
 		Statement statement = null;
 		String CustomerID = null;
@@ -376,7 +380,7 @@ public class CustomerDao {
 		 * The sample code returns "success" by default.
 		 * You need to handle the database insertion of the customer details and return "success" or "failure" based on result of the database insertion.
 		 */
-		System.out.println("jia yi ge customer");
+//		System.out.println("jia yi ge customer");
 		Connection connection = null;
 		Statement statement = null;
 		PreparedStatement preparedStatement = null;
@@ -618,14 +622,14 @@ public class CustomerDao {
 		 * The students code to fetch data from the database will be written here
 		 */
 
-        return getDummyCustomerList();
+        return getAllCustomers();
     }
 
     public List<Customer> getAllCustomers() {
         /*
 		 * This method fetches returns all customers
 		 */
-		System.out.println("suo you customer");
+//		System.out.println("suo you customer");
 		List<Customer> customers = new ArrayList<Customer>();
 		//connections
 		Connection connection = null;
