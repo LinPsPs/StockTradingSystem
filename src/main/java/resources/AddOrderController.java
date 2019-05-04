@@ -46,7 +46,7 @@ public class AddOrderController extends HttpServlet {
         String customerId = request.getParameter("customerId");
         // submitted by customer
         if (customerId == null) {
-            customerId = (String) request.getSession(false).getAttribute("customerId");
+            customerId = (String) request.getSession(false).getAttribute("customerID");
         }
         else
         {
@@ -64,7 +64,6 @@ public class AddOrderController extends HttpServlet {
         OrderDao orderDao = new OrderDao();
         CustomerDao customerDao = new CustomerDao();
         StockDao stockDao = new StockDao();
-
         Customer customer = customerDao.getCustomer(customerId);
         Stock stock = stockDao.getStockBySymbol(stockSymbol);
         String result = "success";
