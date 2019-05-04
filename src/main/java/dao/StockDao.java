@@ -168,7 +168,7 @@ public class StockDao {
             connection.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
             statement = connection.createStatement();
             ResultSet rs = statement.executeQuery(
-                    "SELECT * FROM Stock WHERE StockSymbol = " + stockSymbol
+                    "SELECT * FROM Stock WHERE StockSymbol = " + "'" + stockSymbol + "'"
             );
             while (rs.next()) {
                 String companyName = rs.getString("CompanyName");

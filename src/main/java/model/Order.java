@@ -9,6 +9,13 @@ public class Order {
 	 * Each instance variable has a corresponding getter and setter
 	 */
 
+	public Order(){};
+	public Order(int id, Date datetime, int numShares){
+	    this.id = id;
+	    this.datetime = datetime;
+	    this.numShares = numShares;
+    }
+
 	private int id;
     private Date datetime;
     private int numShares;
