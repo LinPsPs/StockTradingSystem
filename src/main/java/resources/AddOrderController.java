@@ -47,7 +47,7 @@ public class AddOrderController extends HttpServlet {
 
         // submitted by customer
         if (customerId == null) {
-            customerId = (String) request.getSession(false).getAttribute("customerID");
+            customerId = (String) request.getSession(false).getAttribute("customerId");
         }
         else
         {
