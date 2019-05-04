@@ -157,6 +157,16 @@ public class CustomerDao {
 				customer.setRating(resultSet.getInt("Rating"));
 				customer.setEmail(resultSet.getString("Email"));
 
+				// find account Id
+				int clientId = resultSet.getInt("Id");
+				ResultSet findAccount = connection.createStatement().executeQuery(
+						"SElECT * FROM Account A WHERE A.Client = '" + clientId + "'"
+				);
+				findAccount.next();
+				customer.setAccountNumber(findAccount.getInt("Id"));
+				// find account create time
+				customer.setAccountCreationTime((findAccount.getDate("DateOpened")).toString());
+				findAccount.close();
 				//find person
 
 				ResultSet findCustomer = connection.createStatement().executeQuery(
