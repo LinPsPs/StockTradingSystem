@@ -57,7 +57,7 @@ public class CustomerDao {
 		 * The students code to fetch data from the database based on searc Keyword will be written here
 		 * Each record is required to be encapsulated as a "Customer" class object and added to the "customers" List
 		 */
-
+//		System.out.println("getCustomerS start!!");
 		List<Customer> customers = new ArrayList<Customer>();
 		//connections
 		Connection connection = null;
@@ -130,11 +130,12 @@ public class CustomerDao {
 		 * The students code to fetch data from the database will be written here
 		 * The customer record is required to be encapsulated as a "Customer" class object
 		 */
-		System.out.println("get customer begin!!");
+//		System.out.println("get customer begin!!");
 		Connection connection = null;
 		Statement statement = null;
 		Customer customer = null;
 		try {
+//			System.out.println("getCustomer start!!");
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			connection = DriverManager.getConnection("jdbc:mysql://107.155.113.86:3306/STOCKSYSTEM?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC",
 					"cse305", "CSE305XYZ");
@@ -241,8 +242,62 @@ public class CustomerDao {
 		 * username, which is the email address of the customer, who's ID has to be returned, is given as method parameter
 		 * The Customer's ID is required to be returned as a String
 		 */
-		System.out.println("de dao ID customer");
-		return "111-11-1111";
+		System.out.println("getCustomerID start!!");
+		Connection connection = null;
+		Statement statement = null;
+		String CustomerID = null;
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			connection = DriverManager.getConnection("jdbc:mysql://107.155.113.86:3306/STOCKSYSTEM?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC",
+					"cse305", "CSE305XYZ");
+			connection.setAutoCommit(false); //
+			connection.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
+			statement = connection.createStatement();
+			ResultSet resultSet = statement.executeQuery("SELECT P.SSN FROM Person P WHERE P.Email = '"+email+"'");
+
+			while (resultSet.next()){
+				//find employee
+
+				ResultSet findEmployee = connection.createStatement().executeQuery(
+						"SELECT C.Id FROM Client C WHERE C.Id = "+resultSet.getInt("SSN"));
+				while (findEmployee.next()) {
+					CustomerID = findEmployee.getInt("Id") + "";
+				}
+				findEmployee.close();
+			}
+
+			//clean
+			connection.commit();
+			resultSet.close();
+			statement.close();
+			connection.close();
+			return CustomerID;
+
+		}catch(SQLException ex){
+			System.out.println(ex.getMessage());
+			try{
+				if (connection!=null)
+					connection.rollback();
+			}catch (Exception e){
+				System.out.println(e.getMessage());
+			}
+		} catch (Exception e){
+			System.out.println(e.getMessage());
+		}finally {
+			try{
+				if (statement!=null)
+					statement.close();
+			}catch (SQLException se2){
+				System.out.println(se2.getMessage());
+			}
+			try{
+				if (connection!=null)
+					connection.close();
+			}catch (SQLException se3){
+				System.out.println(se3.getMessage());
+			}
+		}
+		return null;
 	}
 
 
