@@ -63,7 +63,9 @@
 								<option value="customerRepresentative">Customer Representative</option>
 							</select>
 						</div>
-						<input type="submit" value="Login" class="btn btn-success"/>
+						<div class="form-group" style="text-align: center;">
+							<input type="submit" value="Login" class="btn btn-success"/>
+						</div>
 					</form>
 				</div>
 
