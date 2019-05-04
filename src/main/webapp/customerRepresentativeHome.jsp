@@ -9,6 +9,7 @@
 -->
 <div class="container">
     <h2>Customer Representative Options:</h2>
+    <hr>
     <%
         String email = (String)session.getAttribute("email");
         String role = (String)session.getAttribute("role");
@@ -48,51 +49,109 @@
                 </div>
         <%}
     }%>
-
-    <div class="row">
+    <div class="row mt-2">
         <div class="col">
             <div class="card">
-              <div class="card-body">
-                <h5 class="card-title">Record order</h5>
-                <div class="container">
-                    <form action="viewAddCustomerOrder">
-                        <input type="submit" value="Record order" class="btn btn-success"/>
-                    </form>
+                <div class="card-body">
+                    <div class="container">
+                        <div class="media" >
+                            <img src="./img/record_order.png" width="64" height="64" class="mr-3 img-thumbnail" alt="...">
+                            <h5 class="mt-3">Record Order</h5>
+                        </div>
+                        <hr>
+                        <div class="container">
+                            <div class="row">
+                                <div class="media">
+                                    <img src="./img/add_order.png" width="64" height="64" class="mr-3 img-thumbnail" alt="...">
+                                    <form action="viewAddCustomerOrder" class="mt-3">
+                                    <input type="submit" value="Record order" class="btn btn-success"/>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-              </div>
             </div>
         </div>
+    </div>
+    <div class="row mt-2">
         <div class="col">
             <div class="card">
-              <div class="card-body">
-                <h5 class="card-title">Manage Customer</h5>
-                <div class="container">
-                    <form action="viewAddCustomer.jsp">
-                        <input type="submit" value="Add Customer" class="btn btn-primary"/>
-                    </form>
-                    <form action="getCustomers" class="pt-1">
-                        <input type="submit" value="View / Edit / Delete Customer" class="btn btn-primary"/>
-                    </form>
-
+                <div class="card-body">
+                    <div class="container">
+                        <div class="media">
+                            <img src="./img/manage_customer.png" width="64" height="64" class="mr-3 img-thumbnail" alt="...">
+                            <h5 class="mt-3">Manage Customer</h5>
+                        </div>
+                        <hr>
+                        <div class="container">
+                            <div class="row">
+                                <div class="col">
+                                    <div class="row">
+                                        <div class="media">
+                                            <img src="./img/add_customer.png" width="64" height="64" class="mr-3 img-thumbnail" alt="...">
+                                            <form action="viewAddCustomer.jsp" class="mt-3">
+                                                <input type="submit" value="Add Customer" class="btn btn-primary"/>
+                                            </form>
+                                        </div>
+                                    </div>
+                                    <div class="row mt-1">
+                                        <div class="media">
+                                            <img src="./img/view_customers.png" width="64" height="64" class="mr-3 img-thumbnail" alt="...">
+                                            <form action="getCustomers" class="mt-3">
+                                                <input type="submit" value="View / Edit / Delete Customer" class="btn btn-primary"/>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-              </div>
             </div>
         </div>
+    </div>
+
+    <div class="row mt-2">
         <div class="col">
             <div class="card">
-              <div class="card-body">
-                <h5 class="card-title">Other</h5>
-                <div class="container">
-                    <form action="getCustomerMailingList">
-                        <input type="submit" value="Customer Mailing List" class="btn btn-primary"/>
-                    </form>
-
-                    <form action="viewCustomerStockSuggestions" class="pt-1">
-                        <input type="submit" value="View Suggestions" class="btn btn-success"/>
-                    </form>
+                <div class="card-body">
+                    <div class="container">
+                        <div class="media">
+                            <img src="./img/other.png" width="64" height="64" class="mr-3 img-thumbnail" alt="...">
+                            <h5 class="mt-3">Other</h5>
+                        </div>
+                        <hr>
+                        <div class="container">
+                            <div class="row">
+                                <div class="col">
+                                    <div class="row">
+                                        <div class="media">
+                                            <img src="./img/customer_mail.png" width="64" height="64" class="mr-3 img-thumbnail" alt="...">
+                                            <form action="getCustomerMailingList" class="mt-3">
+                                                <input type="submit" value="Customer Mailing List" class="btn btn-primary"/>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="row">
+                                        <div class="media">
+                                            <img src="./img/suggestion.png" width="64" height="64" class="mr-3 img-thumbnail" alt="...">
+                                            <form action="viewCustomerStockSuggestions" class="mt-3">
+                                                <input type="submit" value="View Suggestions" class="btn btn-success"/>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-              </div>
             </div>
         </div>
+    </div>
 </div>
 <%@ include file="footer.jsp" %>

@@ -88,43 +88,49 @@
                         <hr>
                         <div class="container">
                             <div class="row">
-                                <div class="media">
-                                    <img src="./img/view_sales.png" width="64" height="64" class="mr-3 img-thumbnail" alt="...">
-                                    <form action="viewSalesReport.jsp" class="mt-3">
-                                        <input type="submit" value="View sales report" class="btn btn-primary"/>
-                                    </form>
+                                <div class="col">
+                                    <div class="row">
+                                        <div class="media">
+                                            <img src="./img/view_sales.png" width="64" height="64" class="mr-3 img-thumbnail" alt="...">
+                                            <form action="viewSalesReport.jsp" class="mt-3">
+                                                <input type="submit" value="View sales report" class="btn btn-primary"/>
+                                            </form>
+                                        </div>
+                                    </div>
+                                    <div class="row mt-1">
+                                        <div class="media">
+                                            <img src="./img/revenue.png" width="64" height="64" class="mr-3 img-thumbnail" alt="...">
+                                            <form action="viewSummaryListing.jsp" class="mt-3">
+                                                <input type="submit" value="View Revenue Summary" class="btn btn-primary"/>
+                                            </form>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="row">
-                                <div class="media">
-                                    <img src="./img/revenue.png" width="64" height="64" class="mr-3 img-thumbnail" alt="...">
-                                    <form action="viewSummaryListing.jsp" class="mt-3">
-                                        <input type="submit" value="View Revenue Summary" class="btn btn-primary"/>
-                                    </form>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="media">
-                                    <img src="./img/best_employee.png" width="64" height="64" class="mr-3 img-thumbnail" alt="...">
-                                    <form action="getHighestRevenueEmployee" class="mt-3">
-                                        <input type="submit" value="Highest Revenue Customer Representative" class="btn btn-success"/>
-                                    </form>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="media">
-                                    <img src="./img/best_customer.png" width="64" height="64" class="mr-3 img-thumbnail" alt="...">
-                                    <form action="getHighestRevenueCustomer" class="mt-3">
-                                        <input type="submit" value="Highest Revenue Customer" class="btn btn-success"/>
-                                    </form>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="media">
-                                    <img src="./img/search_order.png" width="64" height="64" class="mr-3 img-thumbnail" alt="...">
-                                    <form action="viewSearchOrders" class="mt-3">
-                                        <input type="submit" value="Search orders" class="btn btn-success"/>
-                                    </form>
+                                <div class="col">
+                                    <div class="row">
+                                        <div class="media">
+                                            <img src="./img/best_employee.png" width="64" height="64" class="mr-3 img-thumbnail" alt="...">
+                                            <form action="getHighestRevenueEmployee" class="mt-3">
+                                                <input type="submit" value="Highest Revenue Customer Representative" class="btn btn-success"/>
+                                            </form>
+                                        </div>
+                                    </div>
+                                    <div class="row  mt-1">
+                                        <div class="media">
+                                            <img src="./img/best_customer.png" width="64" height="64" class="mr-3 img-thumbnail" alt="...">
+                                            <form action="getHighestRevenueCustomer" class="mt-3">
+                                                <input type="submit" value="Highest Revenue Customer" class="btn btn-success"/>
+                                            </form>
+                                        </div>
+                                    </div>
+                                    <div class="row  mt-1">
+                                        <div class="media">
+                                            <img src="./img/search_order.png" width="64" height="64" class="mr-3 img-thumbnail" alt="...">
+                                            <form action="viewSearchOrders" class="mt-3">
+                                                <input type="submit" value="Search orders" class="btn btn-success"/>
+                                            </form>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -146,35 +152,41 @@
                         <hr>
                         <div class="container">
                             <div class="row">
-                                <div class="media">
-                                    <img src="./img/set_stock_price.png" width="64" height="64" class="mr-3 img-thumbnail" alt="...">
-                                    <form action="viewSetStockPrice" class="mt-3">
-                                        <input type="submit" value="Set stock price" class="btn btn-primary"/>
-                                    </form>
+                                <div class="col">
+                                    <div class="row">
+                                        <div class="media">
+                                            <img src="./img/set_stock_price.png" width="64" height="64" class="mr-3 img-thumbnail" alt="...">
+                                            <form action="viewSetStockPrice" class="mt-3">
+                                                <input type="submit" value="Set stock price" class="btn btn-primary"/>
+                                            </form>
+                                        </div>
+                                    </div>
+                                    <div class="row mt-1">
+                                        <div class="media">
+                                            <img src="./img/view_allstock.png" width="64" height="64" class="mr-3 img-thumbnail" alt="...">
+                                            <form action="getStocks" class="mt-3">
+                                                <input type="submit" value="View all Stocks" class="btn btn-primary"/>
+                                            </form>
+                                        </div>
+                                    </div>
+                                    <div class="row mt-1">
+                                        <div class="media">
+                                            <img src="./img/best_sell_stock.png" width="64" height="64" class="mr-3 img-thumbnail" alt="...">
+                                            <form action="getBestsellers" class="mt-3">
+                                                <input type="submit" value="View Bestsellers" class="btn btn-primary"/>
+                                            </form>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="row">
-                                <div class="media">
-                                    <img src="./img/view_allstock.png" width="64" height="64" class="mr-3 img-thumbnail" alt="...">
-                                    <form action="getStocks" class="mt-3">
-                                        <input type="submit" value="View all Stocks" class="btn btn-primary"/>
-                                    </form>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="media">
-                                    <img src="./img/best_sell_stock.png" width="64" height="64" class="mr-3 img-thumbnail" alt="...">
-                                    <form action="getBestsellers" class="mt-3">
-                                        <input type="submit" value="View Bestsellers" class="btn btn-primary"/>
-                                    </form>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="media">
-                                    <img src="./img/actively_trade_stock.png" width="64" height="64" class="mr-3 img-thumbnail" alt="...">
-                                    <form action="getActivelyTradedStocks" class="mt-3">
-                                        <input type="submit" value="View actively traded stocks" class="btn btn-success"/>
-                                    </form>
+                                <div class="col">
+                                    <div class="row">
+                                        <div class="media">
+                                            <img src="./img/actively_trade_stock.png" width="64" height="64" class="mr-3 img-thumbnail" alt="...">
+                                            <form action="getActivelyTradedStocks" class="mt-3">
+                                                <input type="submit" value="View actively traded stocks" class="btn btn-success"/>
+                                            </form>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>

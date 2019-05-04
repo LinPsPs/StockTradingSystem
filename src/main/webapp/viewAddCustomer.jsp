@@ -53,7 +53,7 @@ The details are sent to the AddCustomerController class in resources package
 		</div>
 		<div class="form-group">
 			<label for="customerCreditCard">Credit Card Number (No Dashes)</label>
-			<input type="text" class="form-control" id="customerCreditCard" name="customerCreditCard" placeholder="XXXX-XXXX-XXXX-XXXX"  pattern="[0-9]{16} required>
+			<input type="text" class="form-control" id="customerCreditCard" name="customerCreditCard" placeholder="XXXX-XXXX-XXXX-XXXX"  pattern="[0-9]{16}" required>
 		</div>
 		<div class="form-group">
 			<label for="customerRating">Rating (0-9)</label>
