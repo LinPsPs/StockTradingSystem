@@ -248,7 +248,18 @@ public class StockDao {
             resultSet.close();
             preparedStatement.close();
             statement.close();
+            // add this tuple to stock history
+            preparedStatement = connection.prepareStatement("INSERT INTO StockHistory(StockSymbol, ChangeDate, PricePerShare) VALUE (?,?,?)");
+            preparedStatement.setString(1, stockSymbol);
+            // get time
+            java.util.Date dt = new java.util.Date();
+            java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String currentTime = sdf.format(dt);
+            preparedStatement.setString(2, currentTime);
+            preparedStatement.setDouble(3, stockPrice);
+            preparedStatement.executeUpdate();
             connection.close();
+            checkConditionOrder();
             return "success";
         }
         catch(SQLException ex){
@@ -554,5 +565,8 @@ public class StockDao {
             }
         }
         return null;
+    }
+    public void checkConditionOrder() {
+
     }
 }
