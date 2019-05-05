@@ -2,11 +2,13 @@ package dao;
 
 import model.*;
 
+import javax.xml.transform.Result;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.Statement;
 import java.sql.*;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -585,7 +587,102 @@ public class OrderDao {
 		 * The students code to fetch data from the database will be written here
 		 * Show orders for given customerId
 		 */
-       return getDummyOrders();
+        Connection connection = null;
+        Statement statement = null;
+        Statement orderStatement = null;
+        List<Order> orderList = new ArrayList<Order>();
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            connection = DriverManager.getConnection("jdbc:mysql://107.155.113.86:3306/STOCKSYSTEM?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC",
+                    "cse305", "CSE305XYZ");
+            connection.setAutoCommit(false); // only one transaction
+            connection.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
+            statement = connection.createStatement();
+            orderStatement = connection.createStatement();
+            ResultSet accountRs = statement.executeQuery("SELECT Id FROM Account A WHERE A.Client = " + customerId);
+            accountRs.next();
+            int accountId = accountRs.getInt("Id");
+            accountRs.close();
+            ResultSet tradeRs = statement.executeQuery("SELECT OrderId FROM Trade T WHERE T.AccountId = " + accountId);
+            while(tradeRs.next()) {
+                int orderId = tradeRs.getInt("OrderId");
+                ResultSet orderRs = orderStatement.executeQuery("SELECT * FROM Orders O WHERE O.Id = " + orderId);
+                orderRs.next();
+                String priceType = orderRs.getString("PriceType");
+                switch (priceType) {
+                    case "Market":
+                        MarketOrder order = new MarketOrder();
+                        Date orderDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+                                .parse(orderRs.getString("DateTime"));
+                        order.setDatetime(orderDate);
+                        order.setId(orderRs.getInt("Id"));
+                        order.setBuySellType(orderRs.getString("OrderType"));
+                        order.setNumShares(orderRs.getInt("NumShares"));
+                        orderList.add(order);
+                        break;
+                    case "MarketOnClose":
+                        MarketOnCloseOrder order1 = new MarketOnCloseOrder();
+                        Date orderDate1=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+                                .parse(orderRs.getString("DateTime"));
+                        order1.setDatetime(orderDate1);
+                        order1.setId(orderRs.getInt("Id"));
+                        order1.setBuySellType(orderRs.getString("OrderType"));
+                        order1.setNumShares(orderRs.getInt("NumShares"));
+                        orderList.add(order1);
+                        break;
+                    case "TrailingStop":
+                        TrailingStopOrder order2 = new TrailingStopOrder();
+                        Date orderDate2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+                                .parse(orderRs.getString("DateTime"));
+                        order2.setDatetime(orderDate2);
+                        order2.setId(orderRs.getInt("Id"));
+                        order2.setNumShares(orderRs.getInt("NumShares"));
+                        order2.setPercentage(orderRs.getDouble("Percentage"));
+                        orderList.add(order2);
+                        break;
+                    case "HiddenStop":
+                        HiddenStopOrder order3 = new HiddenStopOrder();
+                        Date orderDate3 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+                                .parse(orderRs.getString("DateTime"));
+                        order3.setDatetime(orderDate3);
+                        order3.setId(orderRs.getInt("Id"));
+                        order3.setNumShares(orderRs.getInt("NumShares"));
+                        order3.setPricePerShare(orderRs.getDouble("PricePerShare"));
+                        orderList.add(order3);
+                        break;
+                }
+                orderRs.close();
+            }
+            //clean up
+            connection.commit();
+            tradeRs.close();
+            statement.close();
+            orderStatement.close();
+            connection.close();
+            return orderList;
+        }
+        catch(SQLException ex){
+            System.out.println(ex.getMessage());
+            try{
+                if (connection!=null)
+                    connection.rollback();
+            }
+            catch (Exception e){
+                System.out.println(e.getMessage());
+            }
+        }
+        catch (Exception e){
+            System.out.println(e.getMessage());
+        }
+        finally {
+            try {
+                if (statement != null)
+                    statement.close();
+            } catch (SQLException se2) {
+                System.out.println(se2.getMessage());
+            }
+        }
+        return null;
     }
 
 
