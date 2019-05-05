@@ -6,7 +6,6 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.Statement;
 import java.sql.*;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -210,6 +209,43 @@ public class OrderDao {
             }
             else if(order instanceof HiddenStopOrder) {
                 pricePerShare = ((HiddenStopOrder) order).getPricePerShare();
+                String priceType = "HiddenStop";
+                preparedStatement = connection.prepareStatement("INSERT INTO Orders(NumShares, PricePerShare, DateTime, PriceType, OrderType) VALUE (?,?,?,?,?)");
+                preparedStatement.setInt(1, numShares);
+                preparedStatement.setDouble(2, pricePerShare);
+                // get time
+                java.util.Date dt = new java.util.Date();
+                java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                String currentTime = sdf.format(dt);
+                preparedStatement.setString(3, currentTime);
+                preparedStatement.setString(4, priceType);
+                preparedStatement.setString(5, "Sell");
+                preparedStatement.executeUpdate();
+                connection.commit();
+                rs.close();
+                preparedStatement.close();
+                statement.close();
+                connection.close();
+            }
+            else if(order instanceof TrailingStopOrder) {
+                double percentage = ((TrailingStopOrder) order).getPercentage();
+                String priceType = "TrailingStop";
+                preparedStatement = connection.prepareStatement("INSERT INTO Orders(NumShares, DateTime, Percentage, PriceType, OrderType) VALUE (?,?,?,?,?)");
+                preparedStatement.setInt(1, numShares);
+                // get time
+                java.util.Date dt = new java.util.Date();
+                java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                String currentTime = sdf.format(dt);
+                preparedStatement.setString(2, currentTime);
+                preparedStatement.setDouble(3, percentage);
+                preparedStatement.setString(4, priceType);
+                preparedStatement.setString(5, "Sell");
+                preparedStatement.executeUpdate();
+                connection.commit();
+                rs.close();
+                preparedStatement.close();
+                statement.close();
+                connection.close();
             }
             return "success";
         }
