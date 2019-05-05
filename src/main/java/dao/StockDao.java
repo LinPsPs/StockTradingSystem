@@ -315,7 +315,57 @@ public class StockDao {
 		 * The students code to fetch data from the database will be written here
 		 * Get stockHoldings of customer with customerId
 		 */
-		return getDummyStocks();
+//		System.out.println("getStocksByCustomer start!");
+        Connection connection = null;
+        Statement statement = null;
+        List<Stock> stockList = new ArrayList<Stock>();
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            connection = DriverManager.getConnection("jdbc:mysql://107.155.113.86:3306/STOCKSYSTEM?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC",
+                    "cse305", "CSE305XYZ");
+            connection.setAutoCommit(false); // only one transaction
+            connection.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
+            statement = connection.createStatement();
+            ResultSet rs = statement.executeQuery(
+                    "SELECT * FROM Stock WHERE StockSymbol = "+"("+"SELECT H.StockID FROM HasStock H WHERE AccountID = "+"("+"SELECT A.Id FROM Account A WHERE Client = " +Integer.parseInt(customerId)+"))"
+            );
+            while (rs.next()) {
+                String stockSymbol = rs.getString("StockSymbol");
+                double pricePerShare = rs.getDouble("PricePerShare");
+                String companyName = rs.getString("CompanyName");
+                String type = rs.getString("Type");
+                int totalShare = rs.getInt("TotalShare");
+                Stock stock  = new Stock(companyName, stockSymbol, type, pricePerShare, totalShare);
+                stockList.add(stock);
+            }
+            connection.commit();
+            rs.close();
+            statement.close();
+            connection.close();
+            return stockList;
+        }
+        catch(SQLException ex){
+            System.out.println(ex.getMessage());
+            try{
+                if (connection!=null)
+                    connection.rollback();
+            }
+            catch (Exception e){
+                System.out.println(e.getMessage());
+            }
+        }
+        catch (Exception e){
+            System.out.println(e.getMessage());
+        }
+        finally {
+            try {
+                if (statement != null)
+                    statement.close();
+            } catch (SQLException se2) {
+                System.out.println(se2.getMessage());
+            }
+        }
+        return null;
 	}
 
     public List<Stock> getStocksByName(String name) {
