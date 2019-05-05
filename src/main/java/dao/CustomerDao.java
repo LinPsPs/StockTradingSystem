@@ -160,7 +160,7 @@ public class CustomerDao {
 				// find account Id
 				int clientId = resultSet.getInt("Id");
 				ResultSet findAccount = connection.createStatement().executeQuery(
-						"SElECT * FROM Account A WHERE A.Client = '" + clientId + "'"
+						"SElECT * FROM Account A WHERE A.Client = " + clientId
 				);
 				findAccount.next();
 				customer.setAccountNumber(findAccount.getInt("Id"));
