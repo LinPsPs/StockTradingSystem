@@ -221,6 +221,32 @@ public class OrderDao {
                 preparedStatement.setString(4, priceType);
                 preparedStatement.setString(5, "Sell");
                 preparedStatement.executeUpdate();
+                // insert to statement
+                preparedStatement = connection.prepareStatement("INSERT INTO Transaction(Fee, DateTime, PricePerShare) VALUE (?,?,?)");
+                preparedStatement.setDouble(1, -1);
+                preparedStatement.setString(2, currentTime);
+                preparedStatement.setDouble(3, -1);
+                preparedStatement.executeUpdate();
+                // get the id of trans and order
+                rs = statement.executeQuery("SELECT * FROM Orders ORDER BY Id DESC LIMIT 1");
+                rs.next();
+                int orderId = rs.getInt("Id");
+                rs = statement.executeQuery("SELECT * FROM Transaction ORDER BY Id DESC LIMIT 1");
+                rs.next();
+                int transId = rs.getInt("Id");
+                // insert to trade
+                preparedStatement = connection.prepareStatement("INSERT INTO Trade(AccountId, BrokerId, TransactionId, OrderId, StockId) VALUE (?,?,?,?,?)");
+                preparedStatement.setInt(1, customer.getAccountNumber());
+                if(employee != null) {
+                    preparedStatement.setInt(2, Integer.parseInt(employee.getEmployeeID()));
+                }
+                else {
+                    preparedStatement.setNull(2, java.sql.Types.INTEGER);
+                }
+                preparedStatement.setInt(3, transId);
+                preparedStatement.setInt(4, orderId);
+                preparedStatement.setString(5, stockSymbol);
+                preparedStatement.executeUpdate();
                 connection.commit();
                 rs.close();
                 preparedStatement.close();
@@ -240,6 +266,32 @@ public class OrderDao {
                 preparedStatement.setDouble(3, percentage);
                 preparedStatement.setString(4, priceType);
                 preparedStatement.setString(5, "Sell");
+                preparedStatement.executeUpdate();
+                // insert to statement
+                preparedStatement = connection.prepareStatement("INSERT INTO Transaction(Fee, DateTime, PricePerShare) VALUE (?,?,?)");
+                preparedStatement.setDouble(1, -1);
+                preparedStatement.setString(2, currentTime);
+                preparedStatement.setDouble(3, -1);
+                preparedStatement.executeUpdate();
+                // get the id of trans and order
+                rs = statement.executeQuery("SELECT * FROM Orders ORDER BY Id DESC LIMIT 1");
+                rs.next();
+                int orderId = rs.getInt("Id");
+                rs = statement.executeQuery("SELECT * FROM Transaction ORDER BY Id DESC LIMIT 1");
+                rs.next();
+                int transId = rs.getInt("Id");
+                // insert to trade
+                preparedStatement = connection.prepareStatement("INSERT INTO Trade(AccountId, BrokerId, TransactionId, OrderId, StockId) VALUE (?,?,?,?,?)");
+                preparedStatement.setInt(1, customer.getAccountNumber());
+                if(employee != null) {
+                    preparedStatement.setInt(2, Integer.parseInt(employee.getEmployeeID()));
+                }
+                else {
+                    preparedStatement.setNull(2, java.sql.Types.INTEGER);
+                }
+                preparedStatement.setInt(3, transId);
+                preparedStatement.setInt(4, orderId);
+                preparedStatement.setString(5, stockSymbol);
                 preparedStatement.executeUpdate();
                 connection.commit();
                 rs.close();
