@@ -1,10 +1,15 @@
 package dao;
 
+import model.Account;
 import model.Customer;
 import model.Location;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class CustomerDao {
@@ -145,7 +150,7 @@ public class CustomerDao {
 			connection.setAutoCommit(false); // only one transaction
 			connection.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
 			statement = connection.createStatement();
-			System.out.println(customerID);
+//			System.out.println(customerID);
 //			System.out.println("qwe!!!");
 			ResultSet resultSet = statement.executeQuery("SELECT * FROM Client C WHERE C.Id = "+Integer.parseInt(customerID));
 			//System.out.println("TEST MESSAGE7");
@@ -163,7 +168,9 @@ public class CustomerDao {
 						"SElECT * FROM Account A WHERE A.Client = " + clientId
 				);
 				findAccount.next();
+//				System.out.println(findAccount.getString("Id"));
 				customer.setAccountNumber(findAccount.getInt("Id"));
+
 				// find account create time
 				customer.setAccountCreationTime((findAccount.getDate("DateOpened")).toString());
 				findAccount.close();
@@ -453,6 +460,19 @@ public class CustomerDao {
 			preparedStatement.setInt(2,customer.getRating());
 			preparedStatement.setString(3,customer.getCreditCard());
 			preparedStatement.setString(4,customer.getId());
+			preparedStatement.executeUpdate();
+			//creat account
+			Account account = new Account();
+			preparedStatement = connection.prepareStatement(
+					"INSERT INTO Account(DateOpened, Client) VALUE (?,?)");
+			java.util.Date dt = new java.util.Date();
+
+			java.text.SimpleDateFormat sdf =
+					new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+			String currentTime = sdf.format(dt);
+			preparedStatement.setString(1, currentTime);
+			preparedStatement.setString(2,customer.getId());
 			preparedStatement.executeUpdate();
 
 			//commit
