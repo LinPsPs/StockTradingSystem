@@ -14,8 +14,8 @@
                     <th>OrderId</th>
                     <th>Date</th>
                     <th>Symbol</th>
-                    <th>PricePerShare</th>
-                    <th>Price</th> <!-- trailing-stop price or hidden-stop price -->
+                    <th>Current PricePerShare</th>
+                    <th>Order PricePerShare</th> <!-- trailing-stop price or hidden-stop price -->
                 </tr>
                 </thead>
                 <tbody>

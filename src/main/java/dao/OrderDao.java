@@ -248,6 +248,16 @@ public class OrderDao {
                 preparedStatement.setInt(4, orderId);
                 preparedStatement.setString(5, stockSymbol);
                 preparedStatement.executeUpdate();
+
+                //add to history
+                preparedStatement = connection.prepareStatement(
+                        "INSERT INTO HiddenStop(OrderId, PricePerShare, OriginalPrice, OrderDate) VALUE (?,?,?,?)");
+                preparedStatement.setInt(1,orderId);
+                preparedStatement.setDouble(2,stock.getPrice());
+                preparedStatement.setDouble(3,((HiddenStopOrder) order).getPricePerShare());
+                preparedStatement.setString(4,currentTime);
+                preparedStatement.executeUpdate();
+                //clean
                 connection.commit();
                 rs.close();
                 preparedStatement.close();
@@ -290,10 +300,21 @@ public class OrderDao {
                 else {
                     preparedStatement.setNull(2, java.sql.Types.INTEGER);
                 }
+
                 preparedStatement.setInt(3, transId);
                 preparedStatement.setInt(4, orderId);
                 preparedStatement.setString(5, stockSymbol);
                 preparedStatement.executeUpdate();
+
+                //add to history
+                preparedStatement = connection.prepareStatement(
+                        "INSERT INTO TrailingStop(OrderId, PricePerShare, OriginalPrice, OrderDate) VALUE (?,?,?,?)");
+                preparedStatement.setInt(1,orderId);
+                preparedStatement.setDouble(2,stock.getPrice());
+                preparedStatement.setDouble(3,stock.getPrice()*(1+((TrailingStopOrder) order).getPercentage()));
+                preparedStatement.setString(4,currentTime);
+                preparedStatement.executeUpdate();
+
                 connection.commit();
                 rs.close();
                 preparedStatement.close();
@@ -589,17 +610,21 @@ public class OrderDao {
             statement = connection.createStatement();
             //check order type
             String tempOrderType = null;
-            ResultSet resultSet = statement.executeQuery("SELECT PriceType FROM Orders O  WHERE O.Id ="+orderId);
+            ResultSet resultSet = statement.executeQuery("SELECT PriceType FROM Orders O  WHERE O.Id = "+ orderId);
+            while (resultSet.next()){
+                tempOrderType = resultSet.getString("PriceType");
+            }
             if (tempOrderType==null){
                 connection.commit();
                 resultSet.close();
                 statement.close();
                 connection.close();
+                return orderPriceHistory;
             }
             //valid order
             if (tempOrderType.equals("TrailingStop")){
                 preparedStatement = connection.prepareStatement(
-                        "SELECT T1.OrderId,T1.OrderDate,T1.PricePerShare,((T1.PricePerShare-T1.PricePerShare)/T1.PricePerShare)AS TrailingStop ,T.StockId\n" +
+                        "SELECT T1.OrderId,T1.OrderDate,T1.PricePerShare,T1.OriginalPrice ,T.StockId\n" +
                         "FROM TrailingStop T1, Trade T\n" +
                         "WHERE T1.OrderId=? AND T.OrderId =T1.OrderId");
                 preparedStatement.setInt(1,Integer.parseInt(orderId));
@@ -612,7 +637,7 @@ public class OrderDao {
                     ope.setOrderId(orderId);
                     ope.setStockSymbol(resultSet.getString("StockId"));
                     ope.setPricePerShare(resultSet.getDouble("PricePerShare"));
-                    ope.setPrice(resultSet.getDouble("TrailingStop"));
+                    ope.setPrice(resultSet.getDouble("T1.OriginalPrice"));
                     orderPriceHistory.add(ope);
                 }
             }else {
