@@ -388,8 +388,6 @@ public class StockDao {
 		 * The students code to fetch data from the database will be return getDummyStocks();written here.
 		 * Get list of customer bestseller stocks
 		 */
-
-
         return null;
 
 
@@ -403,7 +401,7 @@ public class StockDao {
 		 */
 //		System.out.println("getStocksByCustomer start!");
         Connection connection = null;
-        Statement statement = null;
+        PreparedStatement preparedStatement = null;
         List<Stock> stockList = new ArrayList<Stock>();
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
@@ -411,22 +409,25 @@ public class StockDao {
                     "cse305", "CSE305XYZ");
             connection.setAutoCommit(false); // only one transaction
             connection.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
-            statement = connection.createStatement();
-            ResultSet rs = statement.executeQuery(
-                    "SELECT * FROM Stock WHERE StockSymbol = "+"("+"SELECT H.StockID FROM HasStock H WHERE AccountID = "+"("+"SELECT A.Id FROM Account A WHERE Client = " +Integer.parseInt(customerId)+"))"
-            );
+            //statement = connection.createStatement();
+            preparedStatement = connection.prepareStatement(
+                   "SELECT S.StockID,S2.PricePerShare,S2.CompanyName,S2.Type,S.NumberOfShare\n" +
+                   "FROM HasStock S, Client C , Account A,Stock S2\n" +
+                   "WHERE  S.AccountID = A.Id AND A.Client = C.Id AND C.Id = ? AND S.StockID = S2.StockSymbol");
+            preparedStatement.setInt(1,Integer.parseInt(customerId));
+            ResultSet rs = preparedStatement.executeQuery();
             while (rs.next()) {
-                String stockSymbol = rs.getString("StockSymbol");
+                String stockSymbol = rs.getString("StockID");
                 double pricePerShare = rs.getDouble("PricePerShare");
                 String companyName = rs.getString("CompanyName");
                 String type = rs.getString("Type");
-                int totalShare = rs.getInt("TotalShare");
+                int totalShare = rs.getInt("NumberOfShare");
                 Stock stock  = new Stock(companyName, stockSymbol, type, pricePerShare, totalShare);
                 stockList.add(stock);
             }
             connection.commit();
             rs.close();
-            statement.close();
+            preparedStatement.close();
             connection.close();
             return stockList;
         }
@@ -445,13 +446,19 @@ public class StockDao {
         }
         finally {
             try {
-                if (statement != null)
-                    statement.close();
-            } catch (SQLException se2) {
-                System.out.println(se2.getMessage());
+                if (preparedStatement != null)
+                    preparedStatement.close();
+            } catch (SQLException s2) {
+                System.out.println(s2.getMessage());
+            }
+            try {
+                if (connection != null)
+                    connection.close();
+            } catch (SQLException se3) {
+                System.out.println(se3.getMessage());
             }
         }
-        return null;
+        return stockList;
 	}
 
     public List<Stock> getStocksByName(String name) {
@@ -518,8 +525,83 @@ public class StockDao {
 		 * The students code to fetch data from the database will be written here
 		 * Return stock suggestions for given "customerId"
 		 */
-
-        return null;
+        ArrayList<Stock> suggestion = new ArrayList<>();
+        Connection connection = null;
+        Statement statement = null;
+        PreparedStatement preparedStatement = null;
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            connection = DriverManager.getConnection("jdbc:mysql://107.155.113.86:3306/STOCKSYSTEM?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC",
+                    "cse305", "CSE305XYZ");
+            connection.setAutoCommit(false); // only one transaction
+            connection.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
+            statement = connection.createStatement();
+            preparedStatement = connection.prepareStatement(
+                    "SELECT S.StockSymbol\n" +
+                            "FROM\n" +
+                            "     (SELECT S.Type, COUNT(*)AS TRADE_COUNT\n" +
+                            "      FROM Trade T,Stock S\n" +
+                            "      WHERE T.StockId = S.StockSymbol AND\n" +
+                            "            T.AccountId = (SELECT A.Id FROM Account A  WHERE A.Client =?)\n" +
+                            "      GROUP BY S.Type\n" +
+                            "      ORDER BY TRADE_COUNT DESC\n" +
+                            "      LIMIT 1)AS HISTORY, Stock S,HasStock HS, Account A,Client C\n" +
+                            "WHERE S.Type = HISTORY.Type AND S.StockSymbol NOT IN (\n" +
+                            "        SELECT S.StockID\n" +
+                            "        FROM HasStock S, Client C , Account A\n" +
+                            "        WHERE  S.AccountID = A.Id AND A.Client = C.Id AND C.Id = ?\n" +
+                            "    )\n" +
+                            "GROUP BY S.StockSymbol\n" +
+                            "ORDER BY S.StockSymbol ASC;");
+            preparedStatement.setInt(1,Integer.parseInt(customerID));
+            preparedStatement.setInt(2,Integer.parseInt(customerID));
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()){
+                Stock stock = getStockBySymbol(resultSet.getString("StockSymbol"));
+                suggestion.add(stock);
+            }
+            connection.commit();
+            resultSet.close();
+            statement.close();
+            connection.close();
+            preparedStatement.close();
+            return suggestion;
+        }
+        catch(SQLException ex){
+            System.out.println(ex.getMessage());
+            try{
+                if (connection!=null)
+                    connection.rollback();
+            }
+            catch (Exception e){
+                System.out.println(e.getMessage());
+            }
+        }
+        catch (Exception e){
+            System.out.println(e.getMessage());
+        }
+        finally {
+            try{
+                if (statement!=null)
+                    statement.close();
+            }catch (SQLException se2){
+                System.out.println(se2.getMessage());
+            }
+            try{
+                if (preparedStatement!=null)
+                    preparedStatement.close();
+            }catch (SQLException s2){
+                System.out.println(s2.getMessage());
+            }
+            try{
+                if (connection!=null)
+                    connection.close();
+            }catch (SQLException se3){
+                System.out.println(se3.getMessage());
+            }
+        }
+        // Error case
+        return suggestion;
 
     }
 
@@ -531,7 +613,7 @@ public class StockDao {
 		 */
 //        System.out.println("getStockPriceHistory start!");
         Connection connection = null;
-        Statement statement = null;
+        PreparedStatement preparedStatement = null;
         List<Stock> stockList = new ArrayList<Stock>();
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
@@ -539,23 +621,26 @@ public class StockDao {
                     "cse305", "CSE305XYZ");
             connection.setAutoCommit(false); // only one transaction
             connection.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
-            statement = connection.createStatement();
-            System.out.println(stockSymbol);
-            ResultSet rs = statement.executeQuery(
-                    "SELECT * FROM Stock WHERE StockSymbol = "+"("+"SELECT StockSymbol FROM StockHistory WHERE StockSymbol = '" +stockSymbol+ "'"+")"
-            );
-            while (rs.next()) {
-                String stocksymbol = rs.getString("StockSymbol");
-                double pricePerShare = rs.getDouble("PricePerShare");
-                String companyName = rs.getString("CompanyName");
-                String type = rs.getString("Type");
-                int totalShare = rs.getInt("TotalShare");
+            //System.out.println(stockSymbol);
+            preparedStatement = connection.prepareStatement(
+                    "SELECT S.StockSymbol, S.Type, S.TotalShare,S.CompanyName,SH.PricePerShare,SH.ChangeDate\n" +
+                    "FROM Stock S, StockHistory SH\n" +
+                    "WHERE S.StockSymbol = SH.StockSymbol AND S.StockSymbol = ?\n" +
+                    "GROUP BY ChangeDate DESC");
+            preparedStatement.setString(1,stockSymbol);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                String stocksymbol = resultSet.getString("StockSymbol");
+                double pricePerShare = resultSet.getDouble("PricePerShare");
+                String companyName = resultSet.getString("CompanyName");
+                String type = resultSet.getString("Type");
+                int totalShare = resultSet.getInt("TotalShare");
                 Stock stock  = new Stock(companyName, stockSymbol, type, pricePerShare, totalShare);
                 stockList.add(stock);
             }
             connection.commit();
-            rs.close();
-            statement.close();
+            resultSet.close();
+            preparedStatement.close();
             connection.close();
             return stockList;
         }
@@ -574,8 +659,8 @@ public class StockDao {
         }
         finally {
             try {
-                if (statement != null)
-                    statement.close();
+                if (preparedStatement != null)
+                    preparedStatement.close();
             } catch (SQLException se2) {
                 System.out.println(se2.getMessage());
             }

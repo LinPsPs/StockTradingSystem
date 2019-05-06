@@ -43,7 +43,7 @@ public class GetStockPriceHistoryController extends HttpServlet {
 		List<Stock> stocks = stockDao.getStockPriceHistory(stockSymbol);
 
 		request.setAttribute("stocks", stocks);
-		request.setAttribute("heading", "Stock price history");
+		request.setAttribute("heading", "Stock price history for "+stockSymbol);
 
         RequestDispatcher rd = request.getRequestDispatcher("showStocks.jsp");
         rd.forward(request, response);
