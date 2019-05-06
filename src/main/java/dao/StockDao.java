@@ -273,7 +273,7 @@ public class StockDao {
             preparedStatement.setDouble(3, stockPrice);
             preparedStatement.executeUpdate();
             connection.close();
-            checkConditionOrder();
+            checkConditionOrder(stockSymbol, stockPrice);
             return "success";
         }
         catch(SQLException ex){
@@ -840,7 +840,151 @@ public class StockDao {
         }
         return null;
     }
-    public void checkConditionOrder() {
-
+    public void checkConditionOrder(String stockSymbol, double stockPrice) {
+        /**
+         *  This method will check the orderlist to find if the order will place
+         */
+        Connection connection = null;
+        Statement statement = null;
+        Statement checkStatement = null;
+        PreparedStatement preparedStatement;
+        try{
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            connection = DriverManager.getConnection("jdbc:mysql://107.155.113.86:3306/STOCKSYSTEM?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC",
+                    "cse305", "CSE305XYZ");
+            connection.setAutoCommit(false); // only one transaction
+            connection.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
+            statement = connection.createStatement();
+            checkStatement = connection.createStatement();
+            // check hiddenStop
+            int orderId;
+            double numShares;
+            ResultSet hiddenStop = statement.executeQuery("SELECT Id FROM Orders O WHERE O.PriceType = '" + "HiddenStop" + "'");
+            while(hiddenStop.next()) {
+                orderId = hiddenStop.getInt("Id");
+                numShares = hiddenStop.getDouble("NumShares");
+                ResultSet rs = checkStatement.executeQuery("SELECT * FROM HiddenStop H WHERE H.OrderId = " + orderId);
+                rs.next();
+                double targetPrice = rs.getDouble("OriginalPrice");
+                // insert into current price into this table
+                preparedStatement = connection.prepareStatement("INSERT INTO HiddenStop(OrderId, PricePerShare, OriginalPrice, OrderDate) VALUE (?,?,?,?)");
+                preparedStatement.setInt(1, orderId);
+                preparedStatement.setDouble(2, stockPrice);
+                preparedStatement.setDouble(3, targetPrice);
+                java.util.Date dt = new java.util.Date();
+                java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                String currentTime = sdf.format(dt);
+                preparedStatement.setString(4, currentTime);
+                preparedStatement.executeUpdate();
+                preparedStatement.close();
+                rs.close();
+                // check if it satisfies the target
+                if(stockPrice < targetPrice) {
+                    // check trade
+                    rs = checkStatement.executeQuery("SELECT TransactionId FROM Trade T WHERE T.OrderId = " + orderId);
+                    rs.next();
+                    int transId = rs.getInt("TransactionId");
+                    int accountId = rs.getInt("AccountId");
+                    rs.close();
+                    rs = checkStatement.executeQuery("SELECT NumberOfShare FROM HasStock H WHERE H.AccountID = " + accountId + ", H.StockID = '" + stockSymbol + "'");
+                    if(rs.next()) {
+                        int stockHold = rs.getInt("NumberOfShare");
+                        if(stockHold > numShares) {
+                            stockHold -= numShares;
+                        }
+                        else {
+                            numShares = stockHold;
+                        }
+                        preparedStatement = connection.prepareStatement("UPDATE HasStock H SET H.NumberOfShare = ? WHERE H.AccountID = " + accountId + ", H.StockID = '" + stockSymbol + "'");
+                        preparedStatement.setInt(1, stockHold);
+                        preparedStatement.executeUpdate();
+                        preparedStatement.close();
+                    }
+                    rs.close();
+                    double fee = stockPrice * numShares * 0.05;
+                    preparedStatement = connection.prepareStatement("UPDATE Transaction T SET T.fee = ?, T.PricePerShare = ? WHERE T.Id = " + transId);
+                    preparedStatement.setDouble(1, fee);
+                    preparedStatement.setDouble(2, stockPrice);
+                    preparedStatement.executeUpdate();
+                    preparedStatement.close();
+                }
+            }
+            hiddenStop.close();
+            // check trailing stop
+            ResultSet trailingStop = statement.executeQuery("SELECT Id FROM Orders O WHERE O.PriceType = '" + "TrailingStop" + "'");
+            while(hiddenStop.next()) {
+                orderId = trailingStop.getInt("Id");
+                numShares = hiddenStop.getDouble("NumShares");
+                ResultSet rs = checkStatement.executeQuery("SELECT * FROM TrailingStop H WHERE H.OrderId = " + orderId);
+                rs.next();
+                double targetPrice = rs.getDouble("OriginalPrice");
+                // insert into current price into this table
+                preparedStatement = connection.prepareStatement("INSERT INTO TrailingStop(OrderId, PricePerShare, OriginalPrice, OrderDate) VALUE (?,?,?,?)");
+                preparedStatement.setInt(1, orderId);
+                preparedStatement.setDouble(2, stockPrice);
+                preparedStatement.setDouble(3, targetPrice);
+                java.util.Date dt = new java.util.Date();
+                java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                String currentTime = sdf.format(dt);
+                preparedStatement.setString(4, currentTime);
+                preparedStatement.executeUpdate();
+                preparedStatement.close();
+                rs.close();
+                // check if it satisfies the target
+                if(stockPrice < targetPrice) {
+                    // check trade
+                    rs = checkStatement.executeQuery("SELECT TransactionId FROM Trade T WHERE T.OrderId = " + orderId);
+                    rs.next();
+                    int transId = rs.getInt("TransactionId");
+                    int accountId = rs.getInt("AccountId");
+                    rs.close();
+                    rs = checkStatement.executeQuery("SELECT NumberOfShare FROM HasStock H WHERE H.AccountID = " + accountId + ", H.StockID = '" + stockSymbol + "'");
+                    if(rs.next()) {
+                        int stockHold = rs.getInt("NumberOfShare");
+                        if(stockHold > numShares) {
+                            stockHold -= numShares;
+                        }
+                        else {
+                            numShares = stockHold;
+                        }
+                        preparedStatement = connection.prepareStatement("UPDATE HasStock H SET H.NumberOfShare = ? WHERE H.AccountID = " + accountId + ", H.StockID = '" + stockSymbol + "'");
+                        preparedStatement.setInt(1, stockHold);
+                        preparedStatement.executeUpdate();
+                        preparedStatement.close();
+                    }
+                    rs.close();
+                    double fee = stockPrice * numShares * 0.05;
+                    preparedStatement = connection.prepareStatement("UPDATE Transaction T SET T.fee = ?, T.PricePerShare = ? WHERE T.Id = " + transId);
+                    preparedStatement.setDouble(1, fee);
+                    preparedStatement.setDouble(2, stockPrice);
+                    preparedStatement.executeUpdate();
+                    preparedStatement.close();
+                }
+            }
+            statement.close();
+            checkStatement.close();
+            connection.close();
+        }
+        catch(SQLException ex){
+            System.out.println(ex.getMessage());
+            try{
+                if (connection!=null)
+                    connection.rollback();
+            }
+            catch (Exception e){
+                System.out.println(e.getMessage());
+            }
+        }
+        catch (Exception e){
+            System.out.println(e.getMessage());
+        }
+        finally {
+            try {
+                if (statement != null)
+                    statement.close();
+            } catch (SQLException se2) {
+                System.out.println(se2.getMessage());
+            }
+        }
     }
 }
