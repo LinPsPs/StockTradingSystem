@@ -156,6 +156,7 @@ public class OrderDao {
                 rs.next();
                 // check buy or sell
                 int hasStock = rs.getInt("NUM");
+                rs.close();
                 if(hasStock == 1) {
                     rs = statement.executeQuery(
                             "SELECT * FROM HasStock H WHERE StockID = '" + stockSymbol + "' AND AccountID = " + customer.getAccountNumber()
@@ -165,10 +166,12 @@ public class OrderDao {
                     if(buySellType.equals("Sell")) {
                         // sell stock
                         if (stockHold > numShares) {
-                            stockHold -= numShares;
-                            preparedStatement = connection.prepareStatement("UPDATE HasStock H SET H.NumberOfShare = ? WHERE H.AccountID = " + customer.getAccountNumber());
+                            stockHold = stockHold - numShares;
+                            preparedStatement = connection.prepareStatement("UPDATE HasStock H SET H.NumberOfShare = ? " +
+                                    "WHERE H.AccountID = " + customer.getAccountNumber() + " AND H.StockID = '" + stockSymbol + "'");
                             preparedStatement.setInt(1, stockHold);
                             preparedStatement.executeUpdate();
+                            rs.close();
                         }
                         else {
                             // Not enough stock holds
@@ -181,8 +184,9 @@ public class OrderDao {
                     }
                     else {
                         // buy stock
-                        stockHold += numShares;
-                        preparedStatement = connection.prepareStatement("UPDATE HasStock H SET H.NumberOfShare = ? WHERE H.AccountID = " + customer.getAccountNumber());
+                        stockHold = stockHold + numShares;
+                        preparedStatement = connection.prepareStatement("UPDATE HasStock H SET H.NumberOfShare = ? " +
+                                "WHERE H.AccountID = " + customer.getAccountNumber() + " AND H.StockID = '" + stockSymbol + "'");
                         preparedStatement.setInt(1, stockHold);
                         preparedStatement.executeUpdate();
                     }
