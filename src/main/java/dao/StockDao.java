@@ -1,5 +1,6 @@
 package dao;
 
+import com.sun.org.apache.bcel.internal.generic.INEG;
 import com.sun.org.apache.bcel.internal.generic.Select;
 import model.Stock;
 
@@ -388,8 +389,71 @@ public class StockDao {
 		 * The students code to fetch data from the database will be return getDummyStocks();written here.
 		 * Get list of customer bestseller stocks
 		 */
-        return null;
-
+        ArrayList<Stock> customerBest = new ArrayList<>();
+        Connection connection = null;
+        Statement statement = null;
+        PreparedStatement preparedStatement = null;
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            connection = DriverManager.getConnection("jdbc:mysql://107.155.113.86:3306/STOCKSYSTEM?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC",
+                    "cse305", "CSE305XYZ");
+            connection.setAutoCommit(false); // only one transaction
+            connection.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
+            statement = connection.createStatement();
+            preparedStatement = connection.prepareStatement(
+                    "SELECT T.StockId, SUM(O.NumShares)AS TRADE_AMOUNT\n" +
+                    "FROM  Trade T,Stock S,Orders O,Account A, Client C\n" +
+                    "WHERE T.OrderId = O.Id AND T.StockId = S.StockSymbol AND T.AccountId = A.Id AND A.Client = C.Id AND C.Id =?\n" +
+                    "GROUP BY StockId\n" +
+                    "ORDER BY TRADE_AMOUNT DESC");
+            preparedStatement.setInt(1,Integer.parseInt(customerID));
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()){
+                Stock stock = getStockBySymbol(resultSet.getString("StockId"));
+                customerBest.add(stock);
+            }
+            connection.commit();
+            resultSet.close();
+            statement.close();
+            preparedStatement.close();
+            connection.close();
+            return customerBest;
+        }
+        catch(SQLException ex){
+            ex.printStackTrace();
+            try{
+                if (connection!=null)
+                    connection.rollback();
+            }
+            catch (Exception e){
+                System.out.println(e.getMessage());
+            }
+        }
+        catch (Exception e){
+            System.out.println(e.getMessage());
+        }
+        finally {
+            try{
+                if (statement!=null)
+                    statement.close();
+            }catch (SQLException se2){
+                System.out.println(se2.getMessage());
+            }
+            try{
+                if (preparedStatement!=null)
+                    preparedStatement.close();
+            }catch (SQLException s2){
+                System.out.println(s2.getMessage());
+            }
+            try{
+                if (connection!=null)
+                    connection.close();
+            }catch (SQLException se3){
+                System.out.println(se3.getMessage());
+            }
+        }
+        // Error case
+        return customerBest;
 
     }
 

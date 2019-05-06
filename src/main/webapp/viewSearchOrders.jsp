@@ -20,7 +20,9 @@
                                         <option value="${cd.symbol}"> <c:out value = "${cd.symbol}"/></option>
                                     </c:forEach>
                                 </select>
-                                <input type="submit" value="Search" class="btn btn-primary"/>
+                                <div class="form-group mt-3 text-center">
+                                    <input type="submit" value="Search" class="btn btn-primary"/>
+                                </div>
                             </form>
                         </div>
                     </div>
@@ -35,7 +37,9 @@
                         <form method="POST" action="getOrdersByCustomerName">
                             <label for="customerName">Customer Name:</label>
                             <input type="text" class="form-control" id="customerName" name="customerName" placeholder="John Smith">
-                            <input type="submit" value="Search" class="btn btn-primary"/>
+                            <div class="form-group mt-3 text-center">
+                                <input type="submit" value="Search" class="btn btn-primary"/>
+                            </div>
                         </form>
                     </div>
                 </div>

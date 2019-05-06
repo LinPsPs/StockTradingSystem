@@ -44,9 +44,11 @@ public class AddOrderController extends HttpServlet {
         String employeeId;
         Employee employee = null;
         String customerId = request.getParameter("customerId");
+        String placeBy = "employee";
         // submitted by customer
         if (customerId == null) {
             customerId = (String) request.getSession(false).getAttribute("customerID");
+            placeBy = "customer";
         }
         else
         {
@@ -102,15 +104,19 @@ public class AddOrderController extends HttpServlet {
             result = orderDao.submitOrder(order, customer, employee, stock);
         }
         RequestDispatcher rd;
-
         if (result.equals("success")) {
-            rd = request.getRequestDispatcher("home.jsp?result=success");
+            if (placeBy.equals("customer"))
+                response.sendRedirect("home.jsp?status=recordSuccess");
+            else
+                response.sendRedirect("customerRepresentativeHome.jsp?status=recordSuccess");
+            //rd = request.getRequestDispatcher("home.jsp?result=success");
         }
         else
         {
-            rd = request.getRequestDispatcher("home.jsp?result=error");
+            response.sendRedirect("viewAddOrder?status=error");
+            //rd = request.getRequestDispatcher("home.jsp?result=error");
         }
-        rd.forward(request, response);
+        //rd.forward(request, response);
 
 
     }
