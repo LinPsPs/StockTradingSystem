@@ -220,6 +220,18 @@ public class OrderDao {
                 connection.close();
             }
             else if(order instanceof HiddenStopOrder) {
+                // add a check: if there is no enough stock
+                rs = statement.executeQuery("SELECT NumberOfShare FROM HasStock H " +
+                        "WHERE H.AccountID = " + customer.getAccountNumber() + " AND H.StockID = '" + stockSymbol + "'");
+                if(rs.getInt("NumberOfShare") < numShares) {
+                    // not enough
+                    rs.close();
+                    statement.close();
+                    statement.close();
+                    connection.close();
+                    return "fail";
+                }
+                rs.close();
                 pricePerShare = ((HiddenStopOrder) order).getPricePerShare();
                 String priceType = "HiddenStop";
                 preparedStatement = connection.prepareStatement("INSERT INTO Orders(NumShares, PricePerShare, DateTime, PriceType, OrderType) VALUE (?,?,?,?,?)");
@@ -276,6 +288,18 @@ public class OrderDao {
                 connection.close();
             }
             else if(order instanceof TrailingStopOrder) {
+                // add a check: if there is no enough stock
+                rs = statement.executeQuery("SELECT NumberOfShare FROM HasStock H " +
+                        "WHERE H.AccountID = " + customer.getAccountNumber() + " AND H.StockID = '" + stockSymbol + "'");
+                if(rs.getInt("NumberOfShare") < numShares) {
+                    // not enough
+                    rs.close();
+                    statement.close();
+                    statement.close();
+                    connection.close();
+                    return "fail";
+                }
+                rs.close();
                 double percentage = ((TrailingStopOrder) order).getPercentage();
                 String priceType = "TrailingStop";
                 preparedStatement = connection.prepareStatement("INSERT INTO Orders(NumShares, DateTime, Percentage, PriceType, OrderType) VALUE (?,?,?,?,?)");
