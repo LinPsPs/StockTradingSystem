@@ -8,7 +8,7 @@
         if(status != null) {
             if(status.equals("error")) {%>
     <div class="alert alert-danger" role="alert" style="text-align: center">
-        Update Failed! Please Check Input Again!
+        Faild to Record Order! Check Your Input again!
     </div>
     <%}
     else {%>
