@@ -16,7 +16,7 @@ We have already created 3 test accounts, they are
 We load 6 stocks for test. All stocks have an initial stock price history with change date 2019-05-01 00:00:00
 
 
-In trailing stop case, the number in the textfield means 100% minus that number. For example, if you put 5 in that textfield, it means sell this stock when the price become 95% of original price.
+In trailing stop case, the number in the textfield means 100% minus that number. For example, if you put 5 in that textfield, it means sell this stock when the price become equal or lower 95% of or original price.
 
 #some information
 
