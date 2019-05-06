@@ -123,11 +123,80 @@ public class CustomerDao {
 		 * The students code to fetch data from the database will be written here
 		 * The customer record is required to be encapsulated as a "Customer" class object
 		 */
-		System.out.println("highest RevenueCustomer start!!");
-
-
-
-		return getDummyCustomer();
+		Connection connection = null;
+		Statement statement = null;
+		Customer customer = null;
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			connection = DriverManager.getConnection("jdbc:mysql://107.155.113.86:3306/STOCKSYSTEM?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC",
+					"cse305", "CSE305XYZ");
+			connection.setAutoCommit(false); //
+			connection.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
+			statement = connection.createStatement();
+			int tempID = -1;
+			ResultSet resultSet = statement.executeQuery(
+					"SELECT P.SSN AS ClientID,(S.TS-B.TB)AS REVENUE\n" +
+							"FROM\n" +
+							"     (SELECT C.Id, SUM((O.NumShares*T2.PricePerShare)+T2.Fee)AS TB\n" +
+							"      FROM Trade T, Orders O,Client C,Transaction T2\n" +
+							"      WHERE T.AccountId =\n" +
+							"            (SELECT A.Id\n" +
+							"              FROM Account A\n" +
+							"              WHERE A.Client = C.Id)\n" +
+							"      AND O.OrderType = 'BUY' AND T.TransactionId = T2.Id AND T.OrderId = O.Id\n" +
+							"      GROUP BY C.Id) AS B,\n" +
+							"     (SELECT C.Id, SUM((O.NumShares*T2.PricePerShare)-T2.Fee)AS TS\n" +
+							"      FROM Trade T, Orders O,Client C,Transaction T2\n" +
+							"      WHERE T.AccountId =\n" +
+							"            (SELECT A.Id\n" +
+							"              FROM Account A\n" +
+							"              WHERE A.Client = C.Id)\n" +
+							"      AND O.OrderType = 'SELL'AND T.TransactionId = T2.Id AND T.OrderId = O.Id\n" +
+							"      GROUP BY  C.Id) AS S,Person P\n" +
+							"     WHERE B.Id = S.Id AND P.SSN =B.Id\n" +
+							"  ORDER BY  REVENUE DESC\n" +
+							"LIMIT 1; #");
+			while (resultSet.next()){
+				tempID = resultSet.getInt("ClientID");
+			}
+			if (tempID ==-1){
+				connection.commit();
+				resultSet.close();
+				statement.close();
+				connection.close();
+				return customer;
+			}
+			customer = getCustomer(tempID+"");
+			connection.commit();
+			resultSet.close();
+			statement.close();
+			connection.close();
+			return customer;
+		}catch(SQLException ex){
+			System.out.println(ex.getMessage());
+			try{
+				if (connection!=null)
+					connection.rollback();
+			}catch (Exception e){
+				System.out.println(e.getMessage());
+			}
+		} catch (Exception e){
+			System.out.println(e.getMessage());
+		}finally {
+			try{
+				if (statement!=null)
+					statement.close();
+			}catch (SQLException se2){
+				System.out.println(se2.getMessage());
+			}
+			try{
+				if (connection!=null)
+					connection.close();
+			}catch (SQLException se3){
+				System.out.println(se3.getMessage());
+			}
+		}
+		return customer;
 	}
 
 	public Customer getCustomer(String customerID) {

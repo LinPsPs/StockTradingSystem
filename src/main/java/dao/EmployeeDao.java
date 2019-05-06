@@ -506,7 +506,75 @@ public class EmployeeDao {
 		 * The students code to fetch employee data who generated the highest revenue will be written here
 		 * The record is required to be encapsulated as a "Employee" class object
 		 */
-		return getDummyEmployee();
+
+		Connection connection = null;
+		Statement statement = null;
+		Employee employee = null;
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			connection = DriverManager.getConnection("jdbc:mysql://107.155.113.86:3306/STOCKSYSTEM?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC",
+					"cse305", "CSE305XYZ");
+			connection.setAutoCommit(false); //
+			connection.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
+			statement = connection.createStatement();
+			int tempID = -1;
+			ResultSet resultSet = statement.executeQuery(
+					"SELECT E.ID, (S.TS+B.TB)AS REVENUE\n" +
+					"FROM\n" +
+					"     (SELECT E.ID, SUM((O.NumShares*T2.PricePerShare)+T2.Fee) AS TB\n" +
+					"      FROM  Employee E, Trade T, Orders O,Transaction T2\n" +
+					"      WHERE T.BrokerId = E.ID AND T.OrderId = O.Id AND O.OrderType = 'BUY'\n" +
+					"      AND T.TransactionId = T2.Id AND T2.PricePerShare!=-1\n" +
+					"      GROUP BY E.ID) AS B,\n" +
+					"     (SELECT E.ID, SUM((O.NumShares*T2.PricePerShare)-T2.Fee) AS TS\n" +
+					"      FROM  Employee E, Trade T, Orders O,Transaction T2\n" +
+					"      WHERE T.BrokerId = E.ID AND T.OrderId = O.Id AND O.OrderType = 'SELL'\n" +
+					"      AND T.TransactionId = T2.Id AND T2.PricePerShare!=-1\n" +
+					"      GROUP BY E.ID) AS S,Person P,Employee E\n" +
+					"WHERE S.ID = B.ID AND E.ID = S.ID AND E.ID = B.ID AND E.SSN = P.SSN\n" +
+					"ORDER BY REVENUE DESC\n" +
+					"LIMIT 1;");
+			while (resultSet.next()){
+				tempID = resultSet.getInt("ID");
+			}
+			if (tempID ==-1){
+				connection.commit();
+				resultSet.close();
+				statement.close();
+				connection.close();
+				return employee;
+			}
+			employee = getEmployee(tempID+"");
+			connection.commit();
+			resultSet.close();
+			statement.close();
+			connection.close();
+			return employee;
+		}catch(SQLException ex){
+			System.out.println(ex.getMessage());
+			try{
+				if (connection!=null)
+					connection.rollback();
+			}catch (Exception e){
+				System.out.println(e.getMessage());
+			}
+		} catch (Exception e){
+			System.out.println(e.getMessage());
+		}finally {
+			try{
+				if (statement!=null)
+					statement.close();
+			}catch (SQLException se2){
+				System.out.println(se2.getMessage());
+			}
+			try{
+				if (connection!=null)
+					connection.close();
+			}catch (SQLException se3){
+				System.out.println(se3.getMessage());
+			}
+		}
+		return employee;
 	}
 
 	public String getEmployeeID(String username) {
