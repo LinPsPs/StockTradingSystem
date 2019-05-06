@@ -113,11 +113,16 @@ public class OrderDao {
                 java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 String currentTime = sdf.format(dt);
                 preparedStatement.setString(3, currentTime);
-                String buySellType = ((MarketOrder)order).getBuySellType();
+                String buySellType;
                 // check type
-                String priceType = "MarketOnClose";
+                String priceType = null;
                 if(order instanceof MarketOrder) {
                     priceType = "Market";
+                    buySellType = ((MarketOrder)order).getBuySellType();
+                }
+                else {
+                    priceType = "MarketOnClose";
+                    buySellType = ((MarketOnCloseOrder)order).getBuySellType();
                 }
                 preparedStatement.setString(4, priceType);
                 preparedStatement.setString(5, buySellType);
