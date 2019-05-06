@@ -36,7 +36,8 @@ public class GetHighestRevenueEmployeeController extends HttpServlet {
 		Employee employee = employeeDao.getHighestRevenueEmployee();
 
 		List<Employee> employees = new LinkedList<Employee>();
-		employees.add(employee);
+		if (employee!=null)
+			employees.add(employee);
 		request.setAttribute("employees", employees);
 		request.setAttribute("heading", "Highest Revenue Employee");
 		RequestDispatcher rd = request.getRequestDispatcher("showEmployee.jsp");

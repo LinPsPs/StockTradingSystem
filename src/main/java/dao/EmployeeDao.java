@@ -519,21 +519,13 @@ public class EmployeeDao {
 			statement = connection.createStatement();
 			int tempID = -1;
 			ResultSet resultSet = statement.executeQuery(
-					"SELECT E.ID, (S.TS+B.TB)AS REVENUE\n" +
-					"FROM\n" +
-					"     (SELECT E.ID, SUM((O.NumShares*T2.PricePerShare)+T2.Fee) AS TB\n" +
-					"      FROM  Employee E, Trade T, Orders O,Transaction T2\n" +
-					"      WHERE T.BrokerId = E.ID AND T.OrderId = O.Id AND O.OrderType = 'BUY'\n" +
-					"      AND T.TransactionId = T2.Id AND T2.PricePerShare!=-1\n" +
-					"      GROUP BY E.ID) AS B,\n" +
-					"     (SELECT E.ID, SUM((O.NumShares*T2.PricePerShare)-T2.Fee) AS TS\n" +
-					"      FROM  Employee E, Trade T, Orders O,Transaction T2\n" +
-					"      WHERE T.BrokerId = E.ID AND T.OrderId = O.Id AND O.OrderType = 'SELL'\n" +
-					"      AND T.TransactionId = T2.Id AND T2.PricePerShare!=-1\n" +
-					"      GROUP BY E.ID) AS S,Person P,Employee E\n" +
-					"WHERE S.ID = B.ID AND E.ID = S.ID AND E.ID = B.ID AND E.SSN = P.SSN\n" +
-					"ORDER BY REVENUE DESC\n" +
-					"LIMIT 1;");
+					"SELECT E.ID, SUM((O.NumShares*T2.PricePerShare)) AS REVENUE\n" +
+							"      FROM  Employee E, Trade T, Orders O,Transaction T2\n" +
+							"      WHERE T.BrokerId = E.ID AND T.OrderId = O.Id\n" +
+							"      AND T.TransactionId = T2.Id AND T2.PricePerShare!=-1\n" +
+							"      GROUP BY E.ID\n" +
+							"      ORDER BY REVENUE DESC\n" +
+							"      LIMIT 1");
 			while (resultSet.next()){
 				tempID = resultSet.getInt("ID");
 			}
