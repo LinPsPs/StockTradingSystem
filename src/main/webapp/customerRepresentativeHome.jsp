@@ -47,7 +47,11 @@
                 <div class="alert alert-danger" role="alert" style="text-align: center">
                     Delete Employee Fail!
                 </div>
-        <%}
+        <%}else if(status.equals("recordSuccess")) {%>
+            <div class="alert alert-success" role="alert" style="text-align: center">
+                Record Order Success!
+            </div>
+    <%}
     }%>
     <div class="row mt-2">
         <div class="col">

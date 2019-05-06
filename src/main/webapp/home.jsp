@@ -24,6 +24,15 @@
             response.sendRedirect("index.jsp");
         }
     %>
+    <%
+        String status = request.getParameter("status");
+        if(status != null) {
+            if(status.equals("recordSuccess")) {%>
+            <div class="alert alert-success" role="alert" style="text-align: center">
+                Record Order Success!
+            </div>
+            <%}
+    }%>
     <div class="row mt-2">
         <div class="col">
             <div class="card">
