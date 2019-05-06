@@ -257,11 +257,6 @@ public class StockDao {
             //System.out.println(stockSymbol);
             preparedStatement.setString(2,stockSymbol);
             preparedStatement.executeUpdate();
-            //clean
-            connection.commit();
-            resultSet.close();
-            preparedStatement.close();
-            statement.close();
             // add this tuple to stock history
             preparedStatement = connection.prepareStatement("INSERT INTO StockHistory(StockSymbol, ChangeDate, PricePerShare) VALUE (?,?,?)");
             preparedStatement.setString(1, stockSymbol);
@@ -272,6 +267,11 @@ public class StockDao {
             preparedStatement.setString(2, currentTime);
             preparedStatement.setDouble(3, stockPrice);
             preparedStatement.executeUpdate();
+            //clean
+            connection.commit();
+            resultSet.close();
+            preparedStatement.close();
+            statement.close();
             connection.close();
             checkConditionOrder(stockSymbol, stockPrice);
             return "success";
@@ -859,11 +859,24 @@ public class StockDao {
             // check hiddenStop
             int orderId;
             double numShares;
-            ResultSet hiddenStop = statement.executeQuery("SELECT Id FROM Orders O WHERE O.PriceType = '" + "HiddenStop" + "'");
+            ResultSet hiddenStop = statement.executeQuery("SELECT * FROM Orders O WHERE O.PriceType = '" + "HiddenStop" + "'");
             while(hiddenStop.next()) {
                 orderId = hiddenStop.getInt("Id");
+                // check trade
+                ResultSet rs = checkStatement.executeQuery("SELECT * FROM Trade T WHERE T.OrderId = " + orderId);
+                rs.next();
+                int checkTrans = rs.getInt("TransactionId");
+                rs.close();
+                rs = checkStatement.executeQuery("SELECT Fee FROM Transaction T WHERE T.Id = " + checkTrans);
+                rs.next();
+                if(rs.getInt("Fee") != -1) {
+                    rs.close();
+                    continue;
+                }
+                rs.close();
+                orderId = hiddenStop.getInt("Id");
                 numShares = hiddenStop.getDouble("NumShares");
-                ResultSet rs = checkStatement.executeQuery("SELECT * FROM HiddenStop H WHERE H.OrderId = " + orderId);
+                rs = checkStatement.executeQuery("SELECT * FROM HiddenStop H WHERE H.OrderId = " + orderId);
                 rs.next();
                 double targetPrice = rs.getDouble("OriginalPrice");
                 // insert into current price into this table
@@ -881,12 +894,12 @@ public class StockDao {
                 // check if it satisfies the target
                 if(stockPrice < targetPrice) {
                     // check trade
-                    rs = checkStatement.executeQuery("SELECT TransactionId FROM Trade T WHERE T.OrderId = " + orderId);
+                    rs = checkStatement.executeQuery("SELECT * FROM Trade T WHERE T.OrderId = " + orderId);
                     rs.next();
                     int transId = rs.getInt("TransactionId");
                     int accountId = rs.getInt("AccountId");
                     rs.close();
-                    rs = checkStatement.executeQuery("SELECT NumberOfShare FROM HasStock H WHERE H.AccountID = " + accountId + ", H.StockID = '" + stockSymbol + "'");
+                    rs = checkStatement.executeQuery("SELECT NumberOfShare FROM HasStock H WHERE H.AccountID = " + accountId + " AND H.StockID = '" + stockSymbol + "'");
                     if(rs.next()) {
                         int stockHold = rs.getInt("NumberOfShare");
                         if(stockHold > numShares) {
@@ -895,7 +908,7 @@ public class StockDao {
                         else {
                             numShares = stockHold;
                         }
-                        preparedStatement = connection.prepareStatement("UPDATE HasStock H SET H.NumberOfShare = ? WHERE H.AccountID = " + accountId + ", H.StockID = '" + stockSymbol + "'");
+                        preparedStatement = connection.prepareStatement("UPDATE HasStock H SET H.NumberOfShare = ? WHERE H.AccountID = " + accountId + " AND H.StockID = '" + stockSymbol + "'");
                         preparedStatement.setInt(1, stockHold);
                         preparedStatement.executeUpdate();
                         preparedStatement.close();
@@ -911,11 +924,23 @@ public class StockDao {
             }
             hiddenStop.close();
             // check trailing stop
-            ResultSet trailingStop = statement.executeQuery("SELECT Id FROM Orders O WHERE O.PriceType = '" + "TrailingStop" + "'");
-            while(hiddenStop.next()) {
+            ResultSet trailingStop = statement.executeQuery("SELECT * FROM Orders O WHERE O.PriceType = '" + "TrailingStop" + "'");
+            while(trailingStop.next()) {
                 orderId = trailingStop.getInt("Id");
-                numShares = hiddenStop.getDouble("NumShares");
-                ResultSet rs = checkStatement.executeQuery("SELECT * FROM TrailingStop H WHERE H.OrderId = " + orderId);
+                // check trade
+                ResultSet rs = checkStatement.executeQuery("SELECT * FROM Trade T WHERE T.OrderId = " + orderId);
+                rs.next();
+                int checkTrans = rs.getInt("TransactionId");
+                rs.close();
+                rs = checkStatement.executeQuery("SELECT Fee FROM Transaction T WHERE T.Id = " + checkTrans);
+                rs.next();
+                if(rs.getInt("Fee") != -1) {
+                    rs.close();
+                    continue;
+                }
+                rs.close();
+                numShares = trailingStop.getDouble("NumShares");
+                rs = checkStatement.executeQuery("SELECT * FROM TrailingStop H WHERE H.OrderId = " + orderId);
                 rs.next();
                 double targetPrice = rs.getDouble("OriginalPrice");
                 // insert into current price into this table
@@ -933,12 +958,12 @@ public class StockDao {
                 // check if it satisfies the target
                 if(stockPrice < targetPrice) {
                     // check trade
-                    rs = checkStatement.executeQuery("SELECT TransactionId FROM Trade T WHERE T.OrderId = " + orderId);
+                    rs = checkStatement.executeQuery("SELECT * FROM Trade T WHERE T.OrderId = " + orderId);
                     rs.next();
                     int transId = rs.getInt("TransactionId");
                     int accountId = rs.getInt("AccountId");
                     rs.close();
-                    rs = checkStatement.executeQuery("SELECT NumberOfShare FROM HasStock H WHERE H.AccountID = " + accountId + ", H.StockID = '" + stockSymbol + "'");
+                    rs = checkStatement.executeQuery("SELECT NumberOfShare FROM HasStock H WHERE H.AccountID = " + accountId + " AND H.StockID = '" + stockSymbol + "'");
                     if(rs.next()) {
                         int stockHold = rs.getInt("NumberOfShare");
                         if(stockHold > numShares) {
@@ -947,7 +972,7 @@ public class StockDao {
                         else {
                             numShares = stockHold;
                         }
-                        preparedStatement = connection.prepareStatement("UPDATE HasStock H SET H.NumberOfShare = ? WHERE H.AccountID = " + accountId + ", H.StockID = '" + stockSymbol + "'");
+                        preparedStatement = connection.prepareStatement("UPDATE HasStock H SET H.NumberOfShare = ? WHERE H.AccountID = " + accountId + " AND H.StockID = '" + stockSymbol + "'");
                         preparedStatement.setInt(1, stockHold);
                         preparedStatement.executeUpdate();
                         preparedStatement.close();
@@ -961,8 +986,10 @@ public class StockDao {
                     preparedStatement.close();
                 }
             }
+            trailingStop.close();
             statement.close();
             checkStatement.close();
+            connection.commit();
             connection.close();
         }
         catch(SQLException ex){
