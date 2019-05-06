@@ -12,7 +12,7 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="CSE305" target="1.5" />
+      <module name="CSE305" target="7" />
     </bytecodeTargetLevel>
   </component>
 </project>

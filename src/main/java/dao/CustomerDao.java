@@ -283,11 +283,11 @@ public class CustomerDao {
 				if (connection!=null)
 					connection.rollback();
 			}catch (Exception e){
-				System.out.println("SQL EXCEPTION NOW2, EDITING!!!");
+//				System.out.println("SQL EXCEPTION NOW2, EDITING!!!");
 				System.out.println(e.getMessage());
 			}
 		} catch (Exception e){
-			System.out.println("SQL EXCEPTION NOW3, EDITING!!!");
+//			System.out.println("SQL EXCEPTION NOW3, EDITING!!!");
 			e.printStackTrace();
 			System.out.println(e.getMessage());
 		}finally {
@@ -295,14 +295,14 @@ public class CustomerDao {
 				if (statement!=null)
 					statement.close();
 			}catch (SQLException se2){
-				System.out.println("SQL EXCEPTION NOW4, EDITING!!!");
+//				System.out.println("SQL EXCEPTION NOW4, EDITING!!!");
 				System.out.println(se2.getMessage());
 			}
 			try{
 				if (connection!=null)
 					connection.close();
 			}catch (SQLException se3){
-				System.out.println("SQL EXCEPTION NOW5, EDITING!!!");
+//				System.out.println("SQL EXCEPTION NOW5, EDITING!!!");
 				System.out.println(se3.getMessage());
 			}
 		}
