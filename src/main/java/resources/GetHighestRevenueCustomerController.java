@@ -33,9 +33,9 @@ public class GetHighestRevenueCustomerController extends HttpServlet {
         // TODO Auto-generated method stub
         CustomerDao customerDao = new CustomerDao();
         Customer customer = customerDao.getHighestRevenueCustomer();
-
         List<Customer> customers = new LinkedList<Customer>();
-        customers.add(customer);
+        if (customer!=null)
+            customers.add(customer);
         request.setAttribute("customers", customers);
         request.setAttribute("heading", "Highest Revenue Customer");
         RequestDispatcher rd = request.getRequestDispatcher("showCustomer.jsp");
