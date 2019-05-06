@@ -34,7 +34,7 @@
                     <div class="container">
                         <form method="POST" action="getOrdersByCustomerName">
                             <label for="customerName">Customer Name:</label>
-                            <input type="text" class="form-control" id="customerName" name="customerName" placeholder="John">
+                            <input type="text" class="form-control" id="customerName" name="customerName" placeholder="John Smith">
                             <input type="submit" value="Search" class="btn btn-primary"/>
                         </form>
                     </div>

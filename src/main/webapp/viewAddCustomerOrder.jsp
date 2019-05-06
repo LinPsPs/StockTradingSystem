@@ -49,11 +49,11 @@
         </div>
         <div id='orderPercentage-group' class="form-group d-none">
             <label for="orderPercentage">Percentage</label>
-            <input type="number" class="form-control" id="orderPercentage" name="orderPercentage" >
+            <input type="number" class="form-control" step="0.01" id="orderPercentage" name="orderPercentage" >
         </div>
         <div id="orderPricePerShare-group" class="form-group d-none">
             <label for="orderPricePerShare">Price per share</label>
-            <input type="number" class="form-control" id="orderPricePerShare" name="orderPricePerShare">
+            <input type="number"  class="form-control" id="orderPricePerShare" name="orderPricePerShare">
         </div>
         <div id="orderBuySellType-group" class="form-group">
             <label for="orderBuySellType">Buy/Sell</label>

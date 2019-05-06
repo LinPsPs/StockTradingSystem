@@ -43,7 +43,7 @@ public class GetOrderPriceHistoryController extends HttpServlet {
 		List<OrderPriceEntry> entries = orderDao.getOrderPriceHistory(orderId);
 
 		request.setAttribute("entries", entries);
-		request.setAttribute("heading", "Order price history");
+		request.setAttribute("heading", "Order Price History");
 
         RequestDispatcher rd = request.getRequestDispatcher("viewGetOrderPriceHistory.jsp");
         rd.forward(request, response);
