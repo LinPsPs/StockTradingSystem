@@ -1,6 +1,8 @@
 # CSE 305 Final Project
 ## General Description
 We use an online server as our database, you can access our datebase with IP: 107.155.113.86:3306, Database name: STOCKSYSTEM, user name: cse305, password: CSE305XYZ
+
+This project use JDBC connected with SQL database. In this database, Three different person identities will manipulate differnet data inside the database. The interface for this project are coded by HTML, and some parts has been modified.
 ## Test case 1: Sign up
 You should firstly sign up at least 3 accounts in our online stock trading system - customer, customer representive, manager.
 
