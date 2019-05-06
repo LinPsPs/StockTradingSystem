@@ -907,6 +907,7 @@ public class StockDao {
                         }
                         else {
                             numShares = stockHold;
+                            stockHold = 0;
                         }
                         preparedStatement = connection.prepareStatement("UPDATE HasStock H SET H.NumberOfShare = ? WHERE H.AccountID = " + accountId + " AND H.StockID = '" + stockSymbol + "'");
                         preparedStatement.setInt(1, stockHold);
@@ -971,6 +972,7 @@ public class StockDao {
                         }
                         else {
                             numShares = stockHold;
+                            stockHold = 0;
                         }
                         preparedStatement = connection.prepareStatement("UPDATE HasStock H SET H.NumberOfShare = ? WHERE H.AccountID = " + accountId + " AND H.StockID = '" + stockSymbol + "'");
                         preparedStatement.setInt(1, stockHold);

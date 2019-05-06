@@ -113,7 +113,10 @@ public class AddOrderController extends HttpServlet {
         }
         else
         {
-            response.sendRedirect("viewAddOrder?status=error");
+            if (placeBy.equals("customer"))
+                response.sendRedirect("viewAddOrder?status=error");
+            else
+                response.sendRedirect("viewAddCustomerOrder?status=error");
             //rd = request.getRequestDispatcher("home.jsp?result=error");
         }
         //rd.forward(request, response);
