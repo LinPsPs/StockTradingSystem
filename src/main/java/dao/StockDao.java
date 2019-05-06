@@ -41,8 +41,7 @@ public class StockDao {
 		 */
 
 		// NOT FINISH YET DO NOT USE IT!!!
-
-
+        ArrayList<Stock> activelyTrade = new ArrayList<>();
         Connection connection = null;
         Statement statement = null;
         PreparedStatement preparedStatement = null;
@@ -53,6 +52,20 @@ public class StockDao {
             connection.setAutoCommit(false); // only one transaction
             connection.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
             statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery("SELECT T.StockId,COUNT(*) AS TRADE_COUNT\n" +
+                    "FROM  Trade T,Stock S\n" +
+                    "WHERE  T.StockId = S.StockSymbol\n" +
+                    "GROUP BY StockId\n" +
+                    "ORDER BY TRADE_COUNT DESC");
+            while (resultSet.next()){
+                Stock stock = getStockBySymbol(resultSet.getString("StockId"));
+                activelyTrade.add(stock);
+            }
+            connection.commit();
+            resultSet.close();
+            statement.close();
+            connection.close();
+            return activelyTrade;
         }
         catch(SQLException ex){
             System.out.println(ex.getMessage());
@@ -88,7 +101,7 @@ public class StockDao {
             }
         }
         // Error case
-        return null;
+        return activelyTrade;
     }
 
 	public List<Stock> getAllStocks() {
@@ -305,7 +318,67 @@ public class StockDao {
 		 * Get list of bestseller stocks
 		 */
 
-		return getDummyStocks();
+        ArrayList<Stock> overAllBest = new ArrayList<>();
+        Connection connection = null;
+        Statement statement = null;
+        PreparedStatement preparedStatement = null;
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            connection = DriverManager.getConnection("jdbc:mysql://107.155.113.86:3306/STOCKSYSTEM?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC",
+                    "cse305", "CSE305XYZ");
+            connection.setAutoCommit(false); // only one transaction
+            connection.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
+            statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery("SELECT T.StockId,SUM(O.NumShares)AS SELL_COUNT\n" +
+                    "FROM Trade T, Orders O\n" +
+                    "WHERE T.OrderId = O.Id\n" +
+                    "GROUP BY StockId\n" +
+                    "ORDER BY SELL_COUNT DESC");
+            while (resultSet.next()){
+                Stock stock = getStockBySymbol(resultSet.getString("StockId"));
+                overAllBest.add(stock);
+            }
+            connection.commit();
+            resultSet.close();
+            statement.close();
+            connection.close();
+            return overAllBest;
+        }
+        catch(SQLException ex){
+            System.out.println(ex.getMessage());
+            try{
+                if (connection!=null)
+                    connection.rollback();
+            }
+            catch (Exception e){
+                System.out.println(e.getMessage());
+            }
+        }
+        catch (Exception e){
+            System.out.println(e.getMessage());
+        }
+        finally {
+            try{
+                if (statement!=null)
+                    statement.close();
+            }catch (SQLException se2){
+                System.out.println(se2.getMessage());
+            }
+            try{
+                if (preparedStatement!=null)
+                    preparedStatement.close();
+            }catch (SQLException s2){
+                System.out.println(s2.getMessage());
+            }
+            try{
+                if (connection!=null)
+                    connection.close();
+            }catch (SQLException se3){
+                System.out.println(se3.getMessage());
+            }
+        }
+        // Error case
+        return overAllBest;
 
 	}
 
