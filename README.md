@@ -1,7 +1,7 @@
 # CSE 305 Final Project
 Team:
 
-Zhengyu Wu  ID:111601422  Email:
+Zhengyu Wu  ID:111601422  Email:zhengyu.wu@stonybrook.edu
 
 Suchang Cao ID:111138591  Email:
 
