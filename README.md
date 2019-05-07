@@ -1,29 +1,45 @@
 # CSE 305 Final Project
+Team:
+
+Zhengyu Wu ID:111601422
+
+Team Member2
+
+Team Member3
+
 ## General Description
-We use an online server as our database, you can access our datebase with IP: 107.155.113.86:3306, Database name: STOCKSYSTEM, user name: cse305, password: CSE305XYZ
+※We use an online server as our database, you can access our datebase with IP: 107.155.113.86:3306, Database name: STOCKSYSTEM, user name: cse305, password: CSE305XYZ (But it will be unesscary)
 
-This project use JDBC connected with SQL database. In this database, Three different person identities will manipulate differnet data inside the database. The interface for this project are coded by HTML, and some parts has been modified.
-## Test case 1: Sign up
-You should firstly sign up at least 3 accounts in our online stock trading system - customer, customer representive, manager.
+This project use JDBC connected with SQL database and Bootstrap to simulate an online stock trading experience. Three different person identitie will manipulate differnet data accorss the database. The interface for this project are coded by Bootstrap 4 with Java Servelt. Final website file wiill be Jsp.war and host by Tomcat.
 
-It's worth noting that the customer accounts are created by the customer representive.
+## In order to use the website you need following the steps below
+## Step 1: Sign up
+You should sign up as a Manager in order to added a Customer Representative, 
+or you can directly sign up as a Customer Representative
 
-We have already created 3 test accounts, they are
+Note: Customer can only be added as a Customer Representative
+
+## Step 2: Login
+You can login by using email and password from step 1 
+
+or
+
+You can use test accounts that we have created, they are
 
 1. *Alice: Manager*  Email: alice.manager@test.com Password: test
 2. *John: Customer Rresentative*    Email: john.cr@test.com Password: test
 3. *Howard: Customer* Email: howard.customer@test.com Password: test
 
-## Test case 2: Place order
-We load 6 stocks for test. All stocks have an initial stock price history with change date 2019-05-01 00:00:00
+## Step 3: Dashboard 
+Now you are in the dashboard, you can simple click any option you want to start an online trading experience.
 
-In trailing stop case, the number in the textfield means 100% minus that number. For example, if you put 5 in that textfield, it means sell this stock when the price become equal or lower 95% of or original price.
+#Added Features
 
-#some information
+1. Manager now can use add stock function, which means (TA) don't have to use database to manuliy add stocks.
 
-1. The login information is avaliable in dao classes, but user and password still provided in the upper.
+2. Added Signup function
 
-2. The user interface has been modified.
+3. Added a new index page for UI
 
-3. For invalid inputs, we provided input inspection to prevent invalid inputs, please make sure you fallow the format we provided.
+4. UI improvements across the website,i.e, login,manager home,customer home,.etc
 
