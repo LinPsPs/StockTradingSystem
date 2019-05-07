@@ -5,7 +5,7 @@ Zhengyu Wu ID:111601422
 
 Suchang Cao ID:111138591
 
-Team Member3
+Haolin Yu ID: 111454745 haolin.yu@stonybrook.edu
 
 ## General Description
 ※We use an online server as our database, you can access our datebase with IP: 107.155.113.86:3306, Database name: STOCKSYSTEM, user name: cse305, password: CSE305XYZ (But it will be unesscary)
