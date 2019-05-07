@@ -8,9 +8,9 @@ Suchang Cao ID:111138591  Email:
 Haolin Yu   ID:111454745  Email:haolin.yu@stonybrook.edu
 
 ## General Description
-※We use an online server as our database, you can access our datebase with IP: 107.155.113.86:3306, Database name: STOCKSYSTEM, user name: cse305, password: CSE305XYZ (But it will be unesscary)
+※We use an online server as our database, you can access our datebase with IP: 107.155.113.86:3306, Database name: STOCKSYSTEM, user name: cse305, password: CSE305XYZ
 
-This project use JDBC connected with SQL database and Bootstrap to simulate an online stock trading experience. Three different person identitie will manipulate differnet data accorss the database. The interface for this project are coded by Bootstrap 4 with Java Servelt. Final website file wiill be Jsp.war and host by Tomcat.
+This project use JDBC connected with SQL database and Bootstrap to simulate an online stock trading experience. Three different person identitie will manipulate differnet data accorss the database. The interface for this project are coded by Bootstrap 4 with Java Servelt. Final website file will be Jsp.war and host by Tomcat.
 
 ## In order to use the website you need following the steps below
 ## Step 1: Sign up
