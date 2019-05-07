@@ -42,7 +42,7 @@ public class StockDao {
 		 */
 
 		// NOT FINISH YET DO NOT USE IT!!!
-        ArrayList<Stock> activelyTrade = new ArrayList<>();
+        ArrayList<Stock> activelyTrade = new ArrayList<Stock>();
         Connection connection = null;
         Statement statement = null;
         PreparedStatement preparedStatement = null;
@@ -220,7 +220,95 @@ public class StockDao {
         }
         return null;
     }
-
+    public String addStock(String stockSymbol, String stockType, String stockCompany, double stockPrice, int stockShare){
+        Connection connection = null;
+        Statement statement = null;
+        PreparedStatement preparedStatement = null;
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            connection = DriverManager.getConnection("jdbc:mysql://107.155.113.86:3306/STOCKSYSTEM?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC",
+                    "cse305", "CSE305XYZ");
+            connection.setAutoCommit(false); // only one transaction
+            connection.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
+            statement = connection.createStatement();
+            //check exist of stock
+            String tempStockSymbol = null;
+            preparedStatement = connection.prepareStatement(
+                    "SELECT StockSymbol FROM Stock S WHERE S.StockSymbol = ?");
+            preparedStatement.setString(1,stockSymbol);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()){
+                tempStockSymbol = resultSet.getString("StockSymbol");
+            }
+            if (tempStockSymbol!=null){
+                connection.commit();
+                resultSet.close();
+                preparedStatement.close();
+                statement.close();
+                connection.close();
+                return "exist";
+            }
+            //valid insert
+            preparedStatement = connection.prepareStatement(
+                    "INSERT INTO Stock(stocksymbol, companyname, type, pricepershare, totalshare) VALUE (?,?,?,?,?);");
+            preparedStatement.setString(1,stockSymbol);
+            preparedStatement.setString(2,stockCompany);
+            preparedStatement.setString(3,stockType);
+            preparedStatement.setDouble(4,stockPrice);
+            preparedStatement.setInt(5,stockShare);
+            preparedStatement.executeUpdate();
+            //insert into stock price history
+            preparedStatement = connection.prepareStatement(
+                    "INSERT INTO StockHistory(StockSymbol, ChangeDate, PricePerShare) VALUE (?,?,?)");
+            preparedStatement.setString(1,stockSymbol);
+            java.util.Date dt = new java.util.Date();
+            java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String currentTime = sdf.format(dt);
+            preparedStatement.setString(2,currentTime);
+            preparedStatement.setDouble(3,stockPrice);
+            preparedStatement.executeUpdate();
+            //clean
+            connection.commit();
+            resultSet.close();
+            preparedStatement.close();
+            statement.close();
+            connection.close();
+            return "success";
+        }catch(SQLException ex){
+            ex.printStackTrace();
+            try{
+                if (connection!=null)
+                    connection.rollback();
+            }
+            catch (Exception e){
+                System.out.println(e.getMessage());
+            }
+        }
+        catch (Exception e){
+            System.out.println(e.getMessage());
+        }
+        finally {
+            try{
+                if (statement!=null)
+                    statement.close();
+            }catch (SQLException se2){
+                System.out.println(se2.getMessage());
+            }
+            try{
+                if (preparedStatement!=null)
+                    preparedStatement.close();
+            }catch (SQLException s2){
+                System.out.println(s2.getMessage());
+            }
+            try{
+                if (connection!=null)
+                    connection.close();
+            }catch (SQLException se3){
+                System.out.println(se3.getMessage());
+            }
+        }
+        return "failure";
+    }
     public String setStockPrice(String stockSymbol, double stockPrice) {
         /*
          * The students code to fetch data from the database will be written here
@@ -319,7 +407,7 @@ public class StockDao {
 		 * Get list of bestseller stocks
 		 */
 
-        ArrayList<Stock> overAllBest = new ArrayList<>();
+        ArrayList<Stock> overAllBest = new ArrayList<Stock>();
         Connection connection = null;
         Statement statement = null;
         PreparedStatement preparedStatement = null;
@@ -389,7 +477,7 @@ public class StockDao {
 		 * The students code to fetch data from the database will be return getDummyStocks();written here.
 		 * Get list of customer bestseller stocks
 		 */
-        ArrayList<Stock> customerBest = new ArrayList<>();
+        ArrayList<Stock> customerBest = new ArrayList<Stock>();
         Connection connection = null;
         Statement statement = null;
         PreparedStatement preparedStatement = null;
@@ -589,7 +677,7 @@ public class StockDao {
 		 * The students code to fetch data from the database will be written here
 		 * Return stock suggestions for given "customerId"
 		 */
-        ArrayList<Stock> suggestion = new ArrayList<>();
+        ArrayList<Stock> suggestion = new ArrayList<Stock>();
         Connection connection = null;
         Statement statement = null;
         PreparedStatement preparedStatement = null;

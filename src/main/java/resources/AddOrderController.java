@@ -110,6 +110,11 @@ public class AddOrderController extends HttpServlet {
             else
                 response.sendRedirect("customerRepresentativeHome.jsp?status=recordSuccess");
             //rd = request.getRequestDispatcher("home.jsp?result=success");
+        }else if (result.equals("notEnough")){
+            if (placeBy.equals("customer"))
+                response.sendRedirect("viewAddOrder?status=notEnough");
+            else
+                response.sendRedirect("viewAddCustomerOrder.jsp?status=notEnough");
         }
         else
         {

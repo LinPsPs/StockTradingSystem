@@ -160,6 +160,13 @@
     <servlet>
         <description>
         </description>
+        <display-name>AddStocksController</display-name>
+        <servlet-name>AddStocksController</servlet-name>
+        <servlet-class>resources.AddStocksController</servlet-class>
+    </servlet>
+    <servlet>
+        <description>
+        </description>
         <display-name>GetActivelyTradedStocksController</display-name>
         <servlet-name>GetActivelyTradedStocksController</servlet-name>
         <servlet-class>resources.GetActivelyTradedStocksController</servlet-class>
@@ -435,6 +442,10 @@
     <servlet-mapping>
         <servlet-name>GetOrderHistoryController</servlet-name>
         <url-pattern>/getOrderHistory</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AddStockController</servlet-name>
+        <url-pattern>/addStock</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>ViewSetStockPriceController</servlet-name>

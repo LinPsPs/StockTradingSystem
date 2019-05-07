@@ -38,7 +38,7 @@ public class SalesDao {
         Connection connection = null;
         Statement statement = null;
         PreparedStatement preparedStatement = null;
-        ArrayList<RevenueItem> report = new ArrayList<>();
+        ArrayList<RevenueItem> report = new ArrayList<RevenueItem>();
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             connection = DriverManager.getConnection("jdbc:mysql://107.155.113.86:3306/STOCKSYSTEM?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC",
@@ -119,7 +119,7 @@ public class SalesDao {
         Connection connection = null;
         Statement statement = null;
         PreparedStatement preparedStatement = null;
-        ArrayList<RevenueItem> report = new ArrayList<>();
+        ArrayList<RevenueItem> report = new ArrayList<RevenueItem>();
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             connection = DriverManager.getConnection("jdbc:mysql://107.155.113.86:3306/STOCKSYSTEM?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC",

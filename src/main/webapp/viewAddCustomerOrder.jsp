@@ -10,6 +10,10 @@
     <div class="alert alert-danger" role="alert" style="text-align: center">
         Faild to Record Order! Check Your Input again!
     </div>
+    <%}else if (status.equals("notEnough")){%>
+    <div class="alert alert-danger" role="alert" style="text-align: center">
+        Failed To Record Order! Not Enough Stcok To Place the Order!
+    </div>
     <%}
     else {%>
     <div class="alert alert-danger" role="alert" style="text-align: center">

@@ -4,11 +4,13 @@
 <%@ include file="header.jsp" %>
 <div class="container">
     <h2>Summary Listing</h2>
-    <h3>Search Item Name, Item Type or Customer Name:</h3>
-    <form action="getSummaryListing">
-        <input type="text" name="searchKeyword" placeholder="Item Name or Item Type or Customer Name"
+    <h3>Search Stock Symbol, Stock Type or Customer Name:</h3>
+    <form action="getSummaryListing" class="mt-2">
+        <input type="text" name="searchKeyword" placeholder="Search Stock Symbol or Stock Type or Customer Name"
                class="form-control"/>
-        <input type="submit" value="Search" class="btn btn-success"/>
+        <div class="form-group text-center mt-3">
+            <input type="submit" value="Search" class="btn btn-success"/>
+        </div>
     </form>
 </div>
 <%@ include file="footer.jsp" %>

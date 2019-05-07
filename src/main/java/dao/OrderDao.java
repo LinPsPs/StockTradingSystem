@@ -184,7 +184,7 @@ public class OrderDao {
                             preparedStatement.close();
                             statement.close();
                             connection.close();
-                            return "fail";
+                            return "notEnough";
                         }
                     }
                     else {
@@ -203,7 +203,7 @@ public class OrderDao {
                         preparedStatement.close();
                         statement.close();
                         connection.close();
-                        return "fail";
+                        return "notEnough";
                     }
                     else {
                         preparedStatement = connection.prepareStatement("INSERT INTO HasStock(StockID, AccountID, NumberOfShare) VALUE(?, ?, ?)");
@@ -229,7 +229,7 @@ public class OrderDao {
                     statement.close();
                     statement.close();
                     connection.close();
-                    return "fail";
+                    return "notEnough";
                 }
                 rs.close();
                 pricePerShare = ((HiddenStopOrder) order).getPricePerShare();
@@ -297,7 +297,7 @@ public class OrderDao {
                     statement.close();
                     statement.close();
                     connection.close();
-                    return "fail";
+                    return "notEnough";
                 }
                 rs.close();
                 double percentage = ((TrailingStopOrder) order).getPercentage();
