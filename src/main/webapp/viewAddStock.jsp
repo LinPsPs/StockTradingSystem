@@ -4,7 +4,7 @@
 <%@ include file="header.jsp" %>
 
 <div class="container">
-    <h2>Set Stock Price:</h2>
+    <h2>Add A Stock:</h2>
         <%
         String status = request.getParameter("status");
         if(status != null) {
