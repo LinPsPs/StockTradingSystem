@@ -33,7 +33,8 @@ You can use test accounts that we have created, they are
 ## Step 3: Dashboard 
 Now you are in the dashboard, you can simple click any option you want to start an online trading experience.
 
-#Added Features
+
+## Added Features
 
 1. Manager now can use add stock function, which means (TA) don't have to use database to manuliy add stocks.
 
