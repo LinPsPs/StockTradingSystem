@@ -14,13 +14,13 @@ import java.util.List;
 /**
  * Servlet implementation class AddCustomerController
  */
-public class AddStockController extends HttpServlet {
+public class AddStocksController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public AddStockController() {
+    public AddStocksController() {
         super();
         // TODO Auto-generated constructor stub
     }

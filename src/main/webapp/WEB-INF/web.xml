@@ -444,7 +444,7 @@
         <url-pattern>/getOrderHistory</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>AddStockController</servlet-name>
+        <servlet-name>AddStocksController</servlet-name>
         <url-pattern>/addStock</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
