@@ -96,7 +96,7 @@ public class OrderDao {
             // get the price of this stock
             String stockSymbol = stock.getSymbol();
             ResultSet rs = statement.executeQuery(
-                    "SELECT PricePerShare, TotalShare FROM Stock S WHERE S.StockSymbol = " + "'" + stockSymbol + "'"
+                    "SELECT PricePerShare FROM Stock S WHERE S.StockSymbol = " + "'" + stockSymbol + "'"
             );
             rs.next();
             double pricePerShare = rs.getDouble("PricePerShare");
@@ -221,12 +221,12 @@ public class OrderDao {
             }
             else if(order instanceof HiddenStopOrder) {
                 // add a check: if there is no enough stock
-                rs = statement.executeQuery("SELECT NumberOfShare FROM HasStock H " +
+                rs = statement.executeQuery("SELECT * FROM HasStock H " +
                         "WHERE H.AccountID = " + customer.getAccountNumber() + " AND H.StockID = '" + stockSymbol + "'");
+                rs.next();
                 if(rs.getInt("NumberOfShare") < numShares) {
                     // not enough
                     rs.close();
-                    statement.close();
                     statement.close();
                     connection.close();
                     return "notEnough";
@@ -289,12 +289,12 @@ public class OrderDao {
             }
             else if(order instanceof TrailingStopOrder) {
                 // add a check: if there is no enough stock
-                rs = statement.executeQuery("SELECT NumberOfShare FROM HasStock H " +
+                rs = statement.executeQuery("SELECT * FROM HasStock H " +
                         "WHERE H.AccountID = " + customer.getAccountNumber() + " AND H.StockID = '" + stockSymbol + "'");
+                rs.next();
                 if(rs.getInt("NumberOfShare") < numShares) {
                     // not enough
                     rs.close();
-                    statement.close();
                     statement.close();
                     connection.close();
                     return "notEnough";
@@ -366,10 +366,12 @@ public class OrderDao {
             }
             catch (Exception e){
                 System.out.println(e.getMessage());
+                e.printStackTrace();
             }
         }
         catch (Exception e){
             System.out.println(e.getMessage());
+            e.printStackTrace();
         }
         finally {
             try {
@@ -377,6 +379,7 @@ public class OrderDao {
                     statement.close();
             } catch (SQLException se2) {
                 System.out.println(se2.getMessage());
+                se2.printStackTrace();
             }
         }
         return "fail";
