@@ -3,7 +3,7 @@ Team:
 
 Zhengyu Wu  ID:111601422  Email:zhengyu.wu@stonybrook.edu
 
-Suchang Cao ID:111138591  Email:
+Suchang Cao ID:111138591  Email:suchang.cao@stonybrook.edu
 
 Haolin Yu   ID:111454745  Email:haolin.yu@stonybrook.edu
 
