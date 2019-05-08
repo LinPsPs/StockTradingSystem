@@ -12,7 +12,7 @@
     </div>
     <%}else if (status.equals("notEnough")){%>
     <div class="alert alert-danger" role="alert" style="text-align: center">
-        Failed To Record Order! Not Enough Stcok To Place the Order!
+        Failed To Record Order! Not Enough Stock To Place the Order!
     </div>
     <%}
     else {%>
