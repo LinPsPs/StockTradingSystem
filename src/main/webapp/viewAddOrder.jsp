@@ -8,7 +8,11 @@
         if(status != null) {
             if(status.equals("error")) {%>
     <div class="alert alert-danger" role="alert" style="text-align: center">
-        Faild to Record Order! Check Your Input again!
+        Failed to Record Order! Check Your Input again!
+    </div>
+    <%}else if (status.equals("notEnough")){%>
+    <div class="alert alert-danger" role="alert" style="text-align: center">
+        Failed To Record Order! Not Enough Stock To Place the Order!
     </div>
     <%}
     }%>

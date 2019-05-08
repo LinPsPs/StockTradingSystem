@@ -10,6 +10,20 @@ The details are sent to the AddCustomerController class in resources package
 
 <div class="container">
 	<h1>Add a new Customer:</h1>
+    <%
+        String status = request.getParameter("status");
+        if(status != null) {
+            if(status.equals("error")) {%>
+    <div class="alert alert-danger" role="alert" style="text-align: center">
+        Update Failed! Please Check Input Again!
+    </div>
+    <%}
+    else {%>
+    <div class="alert alert-danger" role="alert" style="text-align: center">
+        Some Error Occurred! Please Try Again!
+    </div>
+    <%}
+    }%>
 	<form action="addCustomer" method="POST">
 		<div class="form-row">
             <div class="form-group col">
