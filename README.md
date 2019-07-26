@@ -2,7 +2,7 @@
 ## General Description
 ※We use an online server as our database, you can access our datebase with IP: 107.155.113.86:3306, Database name: STOCKSYSTEM, user name: cse305, password: CSE305XYZ
 
-This project use JDBC connected with SQL database and Bootstrap to simulate an online stock trading experience. Three different person identitie will manipulate differnet data accorss the database. The interface for this project are coded by Bootstrap 4 with Java Servelt. Final website file will be Jsp.war and host by Tomcat.
+This project uses JDBC connected with SQL database and Bootstrap to simulate an online stock trading experience. Three different person identities will manipulate different data acorss the database. The interface for this project is coded by Bootstrap 4 with Java Servlet. Final website file will be Jsp.war and host by Tomcat.
 
 ## In order to use the website you need following the steps below
 ## Step 1: Sign up
