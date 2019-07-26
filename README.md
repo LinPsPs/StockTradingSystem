@@ -1,12 +1,4 @@
-# CSE 305 Final Project
-Team:
-
-Zhengyu Wu  ID:111601422  Email:zhengyu.wu@stonybrook.edu
-
-Suchang Cao ID:111138591  Email:suchang.cao@stonybrook.edu
-
-Haolin Yu   ID:111454745  Email:haolin.yu@stonybrook.edu
-
+# Stock Trading System (Principles of Database Systems Final Project)
 ## General Description
 ※We use an online server as our database, you can access our datebase with IP: 107.155.113.86:3306, Database name: STOCKSYSTEM, user name: cse305, password: CSE305XYZ
 
@@ -44,3 +36,10 @@ Now you are in the dashboard, you can simple click any option you want to start 
 
 4. UI improvements across the website,i.e, login,manager home,customer home,.etc
 
+## Sample
+![alt text](https://raw.githubusercontent.com/LinPsPs/StockTradingSystem/master/home.png "home.png")
+![alt text](https://raw.githubusercontent.com/LinPsPs/StockTradingSystem/master/signup.png "signup.png")
+![alt text](https://raw.githubusercontent.com/LinPsPs/StockTradingSystem/master/customer.png "customer.png")
+![alt text](https://raw.githubusercontent.com/LinPsPs/StockTradingSystem/master/orders.png "orders.png")
+
+**Respect to Academic Integrity. If you are a SBU student taking CSE305, do not clone this project and submit as your own final project! This project only used for learning**
